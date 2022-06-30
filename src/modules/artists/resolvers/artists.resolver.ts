@@ -1,14 +1,17 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query } from '@nestjs/graphql';
+import { ArtistsService } from '../services/artists.service';
 
-@Resolver()
+@Resolver('Artist')
 export class ArtistsResolver {
-  /* constructor(
-    private authorsService: ArtistsService,
-    private postsService: PostsService,
-  ) {} */
+  constructor(private readonly artistsService: ArtistsService) {}
 
   @Query(() => String)
   async hello() {
     return 'hello';
+  }
+
+  @Query(() => String)
+  async artists() {
+    return this.artistsService.findAll();
   }
 }

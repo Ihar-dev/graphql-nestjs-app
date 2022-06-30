@@ -1,0 +1,16 @@
+type Artist {
+    id: ID!
+    firstName: String
+    secondName: String
+    middleName: String
+    birthDate: String
+    birthPlace: String
+    country: String
+    bands: [ID]
+    instruments: String
+}
+
+type Query {
+  artists(limit: Int, offset: Int) [artist]
+  artist(id: ID!): Artist
+}
