@@ -29,7 +29,7 @@ export class ArtistsService {
     const response = await this.client.get().catch((res) => {
       res.sendStatus(404);
     });
-    return response.data.items && response.data.items.length > 0
+    return response?.data?.items && response.data.items.length > 0
       ? response.data.items
       : defaultArtistsArray;
   }
