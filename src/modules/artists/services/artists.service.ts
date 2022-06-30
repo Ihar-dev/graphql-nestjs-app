@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { timeStamp } from 'console';
 
 @Injectable()
 export class ArtistsService {
@@ -11,7 +12,10 @@ export class ArtistsService {
     });
   }
 
-  public findAll() {
-    return process.env.ARTISTS_URL;
+  public async findAll() {
+    const response = await this.client.get().catch((res) => {
+      res.sendStatus(404);
+    });
+    return response.data.items;
   }
 }

@@ -10,7 +10,7 @@ export class ArtistsResolver {
     return 'hello';
   }
 
-  @Query(() => String)
+  @Query(() => [String])
   async artists() {
     return this.artistsService.findAll();
   }
