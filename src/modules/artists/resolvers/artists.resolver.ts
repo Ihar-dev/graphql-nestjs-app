@@ -1,5 +1,7 @@
 import { Resolver, Query } from '@nestjs/graphql';
+
 import { ArtistsService } from '../services/artists.service';
+import { CreateArtistDTO } from '../dto/create-artists.dto';
 
 @Resolver('Artist')
 export class ArtistsResolver {
@@ -10,7 +12,7 @@ export class ArtistsResolver {
     return 'hello';
   }
 
-  @Query(() => [String])
+  @Query(() => [CreateArtistDTO])
   async artists() {
     return this.artistsService.findAll();
   }
