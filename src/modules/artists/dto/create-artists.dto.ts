@@ -15,6 +15,6 @@ export class CreateArtistDTO {
   readonly birthPlace: string;
   @Field()
   readonly country: string;
-  @Field()
-  readonly instruments: string;
+  @Field(() => [String])
+  readonly instruments: string[];
 }

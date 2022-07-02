@@ -12,7 +12,7 @@ export class ArtistsResolver {
     return 'hello';
   }
 
-  @Query(() => [CreateArtistDTO])
+  @Query(() => [CreateArtistDTO], { nullable: true })
   async artists() {
     return this.artistsService.findAll();
   }
