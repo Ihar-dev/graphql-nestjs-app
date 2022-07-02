@@ -15,11 +15,12 @@ export class UsersService {
   }
 
   public async login(loginInputDTO: LoginInputDTO): Promise<JwtDTO> {
+    const noServerResponseData = { jwt: 'No Server Response' };
     const response = await this.client
       .post('/login', loginInputDTO)
-      .catch((res) => {
-        res.sendStatus(404);
-      });
-    return response?.data ? response.data : 'Not Found';
+      .catch((res) =>
+        console.log(`Response name: ${res.name}, message: ${res.message}`),
+      );
+    return response?.data ? response.data : noServerResponseData;
   }
 }

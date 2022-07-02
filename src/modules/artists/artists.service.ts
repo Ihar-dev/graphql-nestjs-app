@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
-import { CreateArtistDTO } from '../dto/create-artists.dto';
+import { CreateArtistDTO } from './dto/create-artists.dto';
 
 @Injectable()
 export class ArtistsService {

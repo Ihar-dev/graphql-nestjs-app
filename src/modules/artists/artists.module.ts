@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ArtistsResolver } from './resolvers/artists.resolver';
-import { ArtistsService } from './services/artists.service';
+import { ArtistsResolver } from './artists.resolver';
+import { ArtistsService } from './artists.service';
 
 @Module({
   providers: [ArtistsResolver, ArtistsService],
