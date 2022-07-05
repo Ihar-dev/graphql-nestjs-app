@@ -7,11 +7,6 @@ import { CreateArtistDTO } from './dto/create-artists.dto';
 export class ArtistsResolver {
   constructor(private readonly artistsService: ArtistsService) {}
 
-  @Query(() => String)
-  async hello() {
-    return 'hello';
-  }
-
   @Query(() => [CreateArtistDTO], { nullable: true })
   async artists() {
     return this.artistsService.findAll();
