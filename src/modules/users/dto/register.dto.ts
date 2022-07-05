@@ -1,13 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
-type RegisterResponse = {
-  firstName: string;
-  lastName: string;
-  password: string;
-  email: string;
-  _id: string;
-};
-
 @ObjectType()
 export class RegisterDTO {
   @Field()
