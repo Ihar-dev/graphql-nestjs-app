@@ -5,7 +5,7 @@ import { LoginInputDTO } from './dto/login-input.dto';
 import { RegisterInputDTO } from './dto/register-input.dto';
 import { JwtDTO } from './dto/jwt.dto';
 import { User } from './interfaces/user.interface';
-import { RegisterDTO } from './dto/register.dto';
+import { RegisterResponseDTO } from './dto/register.dto';
 import { RegisterResponseDataType } from './interfaces/register-response.interface';
 import { RegisterChangedResponseDataType } from './interfaces/register-changed-response.interface';
 
@@ -32,28 +32,45 @@ export class UsersService {
     return response ? response.data : noServerResponseData;
   }
 
+  public async getUser(id: string): Promise<RegisterResponseDTO> {
+    const noServerResponseData = this.getNoServerResponseData();
+    const response = await this.client
+      .get(`/${id}`)
+      .catch(res => this.consoleLog(res.name, res.message));
+    if (response) return this.getRegisterChangedResponseData(response.data);
+    return noServerResponseData;
+  }
+
   public async register(
     registerInputDTO: RegisterInputDTO,
-  ): Promise<RegisterDTO> {
-    const noServerResponseData: RegisterChangedResponseDataType = {
+  ): Promise<RegisterResponseDTO> {
+    const noServerResponseData = this.getNoServerResponseData();
+    const response = await this.client
+      .post('/register', registerInputDTO)
+      .catch(res => this.consoleLog(res.name, res.message));
+    if (response) return this.getRegisterChangedResponseData(response.data);
+    return noServerResponseData;
+  }
+
+  private getRegisterChangedResponseData(
+    registerResponseData: RegisterResponseDataType,
+  ): RegisterChangedResponseDataType {
+    const registerChangedResponseData = this.getNoServerResponseData();
+    registerChangedResponseData.id = registerResponseData._id;
+    Object.entries(registerResponseData).forEach(([key, value]) => {
+      if (key !== '_id') registerChangedResponseData[key] = value;
+    });
+    return registerChangedResponseData;
+  }
+
+  private getNoServerResponseData(): RegisterChangedResponseDataType {
+    return {
       id: NO_SERVER_RESPONSE_VALUE,
       firstName: NO_SERVER_RESPONSE_VALUE,
       lastName: NO_SERVER_RESPONSE_VALUE,
       password: NO_SERVER_RESPONSE_VALUE,
       email: NO_SERVER_RESPONSE_VALUE,
     };
-    const registerChangedResponseData = noServerResponseData;
-    const response = await this.client
-      .post('/register', registerInputDTO)
-      .catch(res => this.consoleLog(res.name, res.message));
-    if (response) {
-      const registerResponseData: RegisterResponseDataType = response.data;
-      registerChangedResponseData.id = registerResponseData._id;
-      Object.entries(registerResponseData).forEach(([key, value]) => {
-        if (key !== '_id') registerChangedResponseData[key] = value;
-      });
-    }
-    return response ? registerChangedResponseData : noServerResponseData;
   }
 
   private consoleLog(name: string, message: string): void {
