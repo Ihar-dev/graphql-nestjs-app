@@ -1,24 +1,24 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
 import { UsersService } from './users.service';
-import { JwtDTO } from './dto/jwt.dto';
-import { RegisterResponseDTO } from './dto/register.dto';
+import { JWT } from './dto/jwt.dto';
+import { User } from './dto/register.dto';
 
 @Resolver()
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(() => JwtDTO)
+  @Query(() => JWT)
   async jwt(@Args('email') email: string, @Args('password') password: string) {
     return this.usersService.login({ email, password });
   }
 
-  @Query(() => RegisterResponseDTO)
+  @Query(() => User)
   async user(@Args('id') id: string) {
     return this.usersService.getUser(id);
   }
 
-  @Mutation(() => RegisterResponseDTO)
+  @Mutation(() => User)
   async register(
     @Args('firstName') firstName: string,
     @Args('lastName') lastName: string,

@@ -3,9 +3,8 @@ import axios from 'axios';
 
 import { LoginInputDTO } from './dto/login-input.dto';
 import { RegisterInputDTO } from './dto/register-input.dto';
-import { JwtDTO } from './dto/jwt.dto';
-import { User } from './interfaces/user.interface';
-import { RegisterResponseDTO } from './dto/register.dto';
+import { JWT } from './dto/jwt.dto';
+import { User } from './dto/register.dto';
 import { RegisterResponseDataType } from './interfaces/register-response.interface';
 
 const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
@@ -22,7 +21,7 @@ export class UsersService {
     });
   }
 
-  public async login(loginInputDTO: LoginInputDTO): Promise<JwtDTO> {
+  public async login(loginInputDTO: LoginInputDTO): Promise<JWT> {
     const noServerResponseData = { jwt: NO_SERVER_RESPONSE_VALUE };
     const response = await this.client
       .post('/login', loginInputDTO)
@@ -31,7 +30,7 @@ export class UsersService {
     return response ? response.data : noServerResponseData;
   }
 
-  public async getUser(id: string): Promise<RegisterResponseDTO> {
+  public async getUser(id: string): Promise<User> {
     const noServerResponseData = this.getNoServerResponseData();
     const response = await this.client
       .get(`/${id}`)
@@ -40,9 +39,7 @@ export class UsersService {
     return noServerResponseData;
   }
 
-  public async register(
-    registerInputDTO: RegisterInputDTO,
-  ): Promise<RegisterResponseDTO> {
+  public async register(registerInputDTO: RegisterInputDTO): Promise<User> {
     const noServerResponseData = this.getNoServerResponseData();
     const response = await this.client
       .post('/register', registerInputDTO)
