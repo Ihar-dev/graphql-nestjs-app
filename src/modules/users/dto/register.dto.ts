@@ -11,6 +11,8 @@ type RegisterResponse = {
 @ObjectType()
 export class RegisterDTO {
   @Field()
+  readonly id: string;
+  @Field()
   readonly firstName: string;
   @Field()
   readonly lastName: string;
@@ -18,6 +20,4 @@ export class RegisterDTO {
   readonly password: string;
   @Field()
   readonly email: string;
-  @Field()
-  readonly _id: string;
 }
