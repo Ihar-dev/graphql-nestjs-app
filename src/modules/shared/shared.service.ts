@@ -8,7 +8,11 @@ const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
 export class SharedService {
   private caughtErrorMessage = NO_SERVER_RESPONSE_VALUE;
 
-  public async create<T, Q>(createInputDTO: Q, defaultData: T): Promise<T> {
+  public async create<T, Q>(
+    createInputDTO: Q,
+    defaultData: T,
+    baseURL: string,
+  ): Promise<T> {
     const config = {
       headers: {
         Authorization: `Bearer ${process.env.JWT}`,
@@ -16,9 +20,24 @@ export class SharedService {
     };
     const response = await axios
       .create({
-        baseURL: process.env.GENRES_URL,
+        baseURL,
       })
       .post('', createInputDTO, config)
+      .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    if (response) response.data.id = response.data._id;
+    return response ? response.data : this.getCaughtErrorData(defaultData);
+  }
+
+  public async getById<T>(
+    id: string,
+    defaultData: T,
+    baseURL: string,
+  ): Promise<T> {
+    const response = await axios
+      .create({
+        baseURL,
+      })
+      .get(`/${id}`)
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
     if (response) response.data.id = response.data._id;
     return response ? response.data : this.getCaughtErrorData(defaultData);

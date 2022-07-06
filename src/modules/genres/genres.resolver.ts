@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { GenresService } from './genres.service';
 import { Genre } from './dto/genre.dto';
@@ -17,6 +17,15 @@ export class GenresResolver {
     };
   }
 
+  @Query(() => Genre)
+  async genre(@Args('id') id: string) {
+    return this.genresService.getById(
+      id,
+      this.defaultData,
+      process.env.GENRES_URL,
+    );
+  }
+
   @Mutation(() => Genre)
   async createGenre(
     @Args('name') name: string,
@@ -27,6 +36,7 @@ export class GenresResolver {
     return this.genresService.create(
       { name, description, country, year },
       this.defaultData,
+      process.env.GENRES_URL,
     );
   }
 }
