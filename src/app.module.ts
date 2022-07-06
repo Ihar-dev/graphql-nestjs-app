@@ -4,9 +4,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './modules/artists/artists.module';
-// import { join } from 'path';
 import { AlbumsModule } from './modules/albums/albums.module';
 import { UsersModule } from './modules/users/users.module';
+import { GenresModule } from './modules/genres/genres.module';
 
 @Module({
   imports: [
@@ -17,6 +17,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     AlbumsModule,
     UsersModule,
+    GenresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
