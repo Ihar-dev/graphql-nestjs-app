@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
 import { UsersService } from './users.service';
 import { JWT } from './dto/jwt.dto';
-import { User } from './dto/register.dto';
+import { User } from './dto/user.dto';
 
 @Resolver()
 export class UsersResolver {

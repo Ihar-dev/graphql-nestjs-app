@@ -4,7 +4,7 @@ import axios from 'axios';
 import { LoginInputDTO } from './dto/login-input.dto';
 import { RegisterInputDTO } from './dto/register-input.dto';
 import { JWT } from './dto/jwt.dto';
-import { User } from './dto/register.dto';
+import { User } from './dto/user.dto';
 import { RegisterResponseDataType } from './interfaces/register-response.interface';
 
 const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
@@ -14,6 +14,7 @@ export class UsersService {
   private readonly client;
   private jwt = '';
   private user: User;
+  private caughtErrorMessage = NO_SERVER_RESPONSE_VALUE;
 
   constructor() {
     this.client = axios.create({
@@ -22,30 +23,35 @@ export class UsersService {
   }
 
   public async login(loginInputDTO: LoginInputDTO): Promise<JWT> {
-    const noServerResponseData = { jwt: NO_SERVER_RESPONSE_VALUE };
     const response = await this.client
       .post('/login', loginInputDTO)
-      .catch(res => this.consoleLogCaughtError(res.name, res.message));
+      .catch(res => this.setCaughtErrorMessage(res.name, res.message));
     if (response) this.jwt = response.data.jwt;
-    return response ? response.data : noServerResponseData;
+    return response ? response.data : { jwt: this.caughtErrorMessage };
   }
 
   public async getUser(id: string): Promise<User> {
-    const noServerResponseData = this.getNoServerResponseData();
     const response = await this.client
       .get(`/${id}`)
-      .catch(res => this.consoleLogCaughtError(res.name, res.message));
-    if (response) return this.setUser(response.data);
-    return noServerResponseData;
+      .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    return response ? this.setUser(response.data) : this.getCaughtErrorUser();
   }
 
   public async register(registerInputDTO: RegisterInputDTO): Promise<User> {
-    const noServerResponseData = this.getNoServerResponseData();
     const response = await this.client
       .post('/register', registerInputDTO)
-      .catch(res => this.consoleLogCaughtError(res.name, res.message));
-    if (response) return this.setUser(response.data);
-    return noServerResponseData;
+      .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    return response ? this.setUser(response.data) : this.getCaughtErrorUser();
+  }
+
+  private getCaughtErrorUser(): User {
+    return {
+      id: this.caughtErrorMessage,
+      firstName: this.caughtErrorMessage,
+      lastName: this.caughtErrorMessage,
+      password: this.caughtErrorMessage,
+      email: this.caughtErrorMessage,
+    };
   }
 
   private setUser(data: RegisterResponseDataType): User {
@@ -56,7 +62,7 @@ export class UsersService {
   private getChangedResponseData(
     registerResponseData: RegisterResponseDataType,
   ): User {
-    const registerChangedResponseData = this.getNoServerResponseData();
+    const registerChangedResponseData = this.getDefaultUser();
     registerChangedResponseData.id = registerResponseData._id;
     Object.entries(registerResponseData).forEach(([key, value]) => {
       if (key !== '_id') registerChangedResponseData[key] = value;
@@ -64,17 +70,17 @@ export class UsersService {
     return registerChangedResponseData;
   }
 
-  private getNoServerResponseData(): User {
+  private getDefaultUser(): User {
     return {
-      id: NO_SERVER_RESPONSE_VALUE,
-      firstName: NO_SERVER_RESPONSE_VALUE,
-      lastName: NO_SERVER_RESPONSE_VALUE,
-      password: NO_SERVER_RESPONSE_VALUE,
-      email: NO_SERVER_RESPONSE_VALUE,
+      id: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      email: '',
     };
   }
 
-  private consoleLogCaughtError(name: string, message: string): void {
-    console.log(`Response name: ${name}, message: ${message}`);
+  private setCaughtErrorMessage(name: string, message: string): void {
+    this.caughtErrorMessage = `Response name: ${name}, message: ${message}`;
   }
 }
