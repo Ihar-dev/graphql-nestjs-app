@@ -12,7 +12,6 @@ const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
 @Injectable()
 export class UsersService {
   private readonly client;
-  private jwt = '';
   private user: User;
   private caughtErrorMessage = NO_SERVER_RESPONSE_VALUE;
 
@@ -26,7 +25,7 @@ export class UsersService {
     const response = await this.client
       .post('/login', loginInputDTO)
       .catch(res => this.setCaughtErrorMessage(res.name, res.message));
-    if (response) this.jwt = response.data.jwt;
+    if (response) process.env.JWT = response.data.jwt;
     return response ? response.data : { jwt: this.caughtErrorMessage };
   }
 

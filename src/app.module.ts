@@ -7,6 +7,7 @@ import { ArtistsModule } from './modules/artists/artists.module';
 import { AlbumsModule } from './modules/albums/albums.module';
 import { UsersModule } from './modules/users/users.module';
 import { GenresModule } from './modules/genres/genres.module';
+import { SharedModule } from './modules/shared/shared.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GenresModule } from './modules/genres/genres.module';
     AlbumsModule,
     UsersModule,
     GenresModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

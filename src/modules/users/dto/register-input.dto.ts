@@ -5,11 +5,14 @@ import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 export class RegisterInputDTO {
   @Field()
   readonly firstName: string;
+
   @Field()
   readonly lastName: string;
+
   @Field()
   @Length(8)
   readonly password: string;
+
   @Field()
   @IsEmail()
   @IsNotEmpty()
