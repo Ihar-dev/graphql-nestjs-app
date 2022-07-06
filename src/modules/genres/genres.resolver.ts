@@ -26,6 +26,11 @@ export class GenresResolver {
     );
   }
 
+  @Query(() => [Genre])
+  async genres() {
+    return this.genresService.getAll(this.defaultData, process.env.GENRES_URL);
+  }
+
   @Mutation(() => Genre)
   async createGenre(
     @Args('name') name: string,

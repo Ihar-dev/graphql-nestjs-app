@@ -43,6 +43,18 @@ export class SharedService {
     return response ? response.data : this.getCaughtErrorData(defaultData);
   }
 
+  public async getAll<T>(defaultData: T, baseURL: string): Promise<T[]> {
+    const response = await axios
+      .create({
+        baseURL,
+      })
+      .get('')
+      .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    if (response) response.data.id = response.data._id;
+    if (response) console.log(response.data);
+    return response ? response.data : this.getCaughtErrorData(defaultData);
+  }
+
   private getCaughtErrorData<T>(defaultData: T): T {
     Object.keys(defaultData).forEach(key => {
       switch (typeof defaultData[key]) {
