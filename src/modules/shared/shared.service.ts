@@ -25,9 +25,17 @@ export class SharedService {
   }
 
   private getCaughtErrorData<T>(defaultData: T): T {
-    Object.keys(defaultData).forEach(
-      key => (defaultData[key] = this.caughtErrorMessage),
-    );
+    Object.keys(defaultData).forEach(key => {
+      switch (typeof defaultData[key]) {
+        case 'number':
+          defaultData[key] = 0;
+          break;
+        case 'string':
+          defaultData[key] = this.caughtErrorMessage;
+          break;
+        default:
+      }
+    });
     return defaultData;
   }
 

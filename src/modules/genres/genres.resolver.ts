@@ -5,7 +5,17 @@ import { Genre } from './dto/genre.dto';
 
 @Resolver()
 export class GenresResolver {
-  constructor(private readonly genresService: GenresService) {}
+  private readonly defaultData: Genre;
+
+  constructor(private readonly genresService: GenresService) {
+    this.defaultData = {
+      id: '',
+      name: '',
+      description: '',
+      country: '',
+      year: 0,
+    };
+  }
 
   @Mutation(() => Genre)
   async createGenre(
@@ -14,16 +24,9 @@ export class GenresResolver {
     @Args('country') country: string,
     @Args('year') year: number,
   ) {
-    const defaultData: Genre = {
-      id: '',
-      name: '',
-      description: '',
-      country: '',
-      year: 0,
-    };
     return this.genresService.create(
       { name, description, country, year },
-      defaultData,
+      this.defaultData,
     );
   }
 }
