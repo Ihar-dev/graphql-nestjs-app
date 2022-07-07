@@ -8,6 +8,7 @@ import { AlbumsModule } from './modules/albums/albums.module';
 import { UsersModule } from './modules/users/users.module';
 import { GenresModule } from './modules/genres/genres.module';
 import { SharedModule } from './modules/shared/shared.module';
+import { BandsModule } from './modules/bands/bands.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SharedModule } from './modules/shared/shared.module';
     UsersModule,
     GenresModule,
     SharedModule,
+    BandsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

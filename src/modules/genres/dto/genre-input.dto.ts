@@ -5,17 +5,17 @@ import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 export class GenreInputDTO {
   @Field()
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
   @Field()
   @IsNotEmpty()
   @IsOptional()
-  description: string;
+  readonly description: string;
 
   @Field()
   @IsNotEmpty()
   @IsOptional()
-  country: string;
+  readonly country: string;
 
   @Field(() => Int)
   @IsNotEmpty()
