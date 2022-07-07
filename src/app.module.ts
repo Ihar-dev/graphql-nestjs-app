@@ -13,6 +13,9 @@ import { SharedModule } from './modules/shared/shared.module';
   imports: [
     ArtistsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      buildSchemaOptions: {
+        numberScalarMode: 'integer',
+      },
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),

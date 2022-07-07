@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-
 import axios from 'axios';
+
+import { DeleteResponseDTO } from './dto/delete-response.dto';
 
 const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
 
@@ -29,10 +30,10 @@ export class SharedService {
   }
 
   public async update<T, Q>(
+    id: string,
     inputDTO: Q,
     defaultData: T,
     baseURL: string,
-    id: string,
   ): Promise<T> {
     const config = {
       headers: {
@@ -47,6 +48,26 @@ export class SharedService {
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
     if (response) response.data.id = response.data._id;
     return response ? response.data : this.getCaughtErrorData(defaultData);
+  }
+
+  public async delete(id: string, baseURL: string): Promise<DeleteResponseDTO> {
+    const defaultResponse: DeleteResponseDTO = {
+      name: 'Response',
+      acknowledged: false,
+      deletedCount: 0,
+    };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.JWT}`,
+      },
+    };
+    const response = await axios
+      .create({
+        baseURL,
+      })
+      .delete(`/${id}`, config)
+      .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    return response ? response.data : this.getCaughtErrorData(defaultResponse);
   }
 
   public async getById<T>(

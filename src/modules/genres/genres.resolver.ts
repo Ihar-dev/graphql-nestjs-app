@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { GenresService } from './genres.service';
 import { Genre } from './dto/genre.dto';
+import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
 @Resolver()
 export class GenresResolver {
@@ -59,10 +60,15 @@ export class GenresResolver {
     @Args('year') year: number,
   ) {
     return this.genresService.update(
+      id,
       { name, description, country, year },
       this.defaultData,
       process.env.GENRES_URL,
-      id,
     );
+  }
+
+  @Mutation(() => DeleteResponseDTO)
+  async deleteGenre(@Args('id') id: string) {
+    return this.genresService.delete(id, process.env.GENRES_URL);
   }
 }
