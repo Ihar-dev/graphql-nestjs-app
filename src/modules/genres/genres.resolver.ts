@@ -27,10 +27,12 @@ export class GenresResolver {
   }
 
   @Query(() => [Genre])
-  async genres() {
+  async genres(@Args('limit') limit: number, @Args('offset') offset: number) {
     return this.genresService.getAll(
       [this.defaultData],
       process.env.GENRES_URL,
+      limit,
+      offset,
     );
   }
 

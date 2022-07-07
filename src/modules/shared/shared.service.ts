@@ -43,12 +43,23 @@ export class SharedService {
     return response ? response.data : this.getCaughtErrorData(defaultData);
   }
 
-  public async getAll<T>(defaultData: T, baseURL: string): Promise<T[]> {
+  public async getAll<T>(
+    defaultData: T,
+    baseURL: string,
+    limit: number,
+    offset: number,
+  ): Promise<T[]> {
+    const config = {
+      params: {
+        limit,
+        offset,
+      },
+    };
     const response = await axios
       .create({
         baseURL,
       })
-      .get('')
+      .get('', config)
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
     if (response)
       response.data.items.forEach(element => (element.id = element._id));
