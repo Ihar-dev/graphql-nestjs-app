@@ -49,4 +49,20 @@ export class GenresResolver {
       process.env.GENRES_URL,
     );
   }
+
+  @Mutation(() => Genre)
+  async updateGenre(
+    @Args('id') id: string,
+    @Args('name') name: string,
+    @Args('description') description: string,
+    @Args('country') country: string,
+    @Args('year') year: number,
+  ) {
+    return this.genresService.update(
+      { name, description, country, year },
+      this.defaultData,
+      process.env.GENRES_URL,
+      id,
+    );
+  }
 }

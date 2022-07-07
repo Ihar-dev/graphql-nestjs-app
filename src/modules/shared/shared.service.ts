@@ -9,7 +9,7 @@ export class SharedService {
   private caughtErrorMessage = NO_SERVER_RESPONSE_VALUE;
 
   public async create<T, Q>(
-    createInputDTO: Q,
+    inputDTO: Q,
     defaultData: T,
     baseURL: string,
   ): Promise<T> {
@@ -22,7 +22,28 @@ export class SharedService {
       .create({
         baseURL,
       })
-      .post('', createInputDTO, config)
+      .post('', inputDTO, config)
+      .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    if (response) response.data.id = response.data._id;
+    return response ? response.data : this.getCaughtErrorData(defaultData);
+  }
+
+  public async update<T, Q>(
+    inputDTO: Q,
+    defaultData: T,
+    baseURL: string,
+    id: string,
+  ): Promise<T> {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.JWT}`,
+      },
+    };
+    const response = await axios
+      .create({
+        baseURL,
+      })
+      .put(`/${id}`, inputDTO, config)
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
     if (response) response.data.id = response.data._id;
     return response ? response.data : this.getCaughtErrorData(defaultData);

@@ -2,7 +2,7 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
 @InputType()
-export class CreateInputDTO {
+export class GenreInputDTO {
   @Field()
   @IsNotEmpty()
   name: string;
