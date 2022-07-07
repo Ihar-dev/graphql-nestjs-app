@@ -50,22 +50,23 @@ export class SharedService {
       })
       .get('')
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
-    if (response) response.data.id = response.data._id;
-    if (response) console.log(response.data);
-    return response ? response.data : this.getCaughtErrorData(defaultData);
+    if (response)
+      response.data.items.forEach(element => (element.id = element._id));
+    return response
+      ? response.data.items
+      : this.getCaughtErrorArray(defaultData);
+  }
+
+  private getCaughtErrorArray<T>(defaultData: T): T {
+    if (Array.isArray(defaultData))
+      defaultData.map(element => this.getCaughtErrorData(element));
+    return defaultData;
   }
 
   private getCaughtErrorData<T>(defaultData: T): T {
     Object.keys(defaultData).forEach(key => {
-      switch (typeof defaultData[key]) {
-        case 'number':
-          defaultData[key] = 0;
-          break;
-        case 'string':
-          defaultData[key] = this.caughtErrorMessage;
-          break;
-        default:
-      }
+      if (typeof defaultData[key] === 'string')
+        defaultData[key] = this.caughtErrorMessage;
     });
     return defaultData;
   }
