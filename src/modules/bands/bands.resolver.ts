@@ -27,6 +27,16 @@ export class BandsResolver {
     return this.bandsService.getBandById(id, this.defaultData, this.baseURL);
   }
 
+  @Query(() => [Band])
+  async bands(@Args('limit') limit: number, @Args('offset') offset: number) {
+    return this.bandsService.getAllBands(
+      this.defaultData,
+      this.baseURL,
+      limit,
+      offset,
+    );
+  }
+
   @Mutation(() => BandCreateUpdateDTO)
   async createBand(
     @Args('name') name: string,
