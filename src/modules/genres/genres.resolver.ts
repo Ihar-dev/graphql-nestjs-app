@@ -7,6 +7,7 @@ import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 @Resolver()
 export class GenresResolver {
   private readonly defaultData: Genre;
+  private readonly baseURL: string;
 
   constructor(private readonly genresService: GenresService) {
     this.defaultData = {
@@ -16,22 +17,19 @@ export class GenresResolver {
       country: '',
       year: 0,
     };
+    this.baseURL = process.env.GENRES_URL;
   }
 
   @Query(() => Genre)
   async genre(@Args('id') id: string) {
-    return this.genresService.getById(
-      id,
-      this.defaultData,
-      process.env.GENRES_URL,
-    );
+    return this.genresService.getById(id, this.defaultData, this.baseURL);
   }
 
   @Query(() => [Genre])
   async genres(@Args('limit') limit: number, @Args('offset') offset: number) {
     return this.genresService.getAll(
       [this.defaultData],
-      process.env.GENRES_URL,
+      this.baseURL,
       limit,
       offset,
     );
@@ -47,7 +45,7 @@ export class GenresResolver {
     return this.genresService.create(
       { name, description, country, year },
       this.defaultData,
-      process.env.GENRES_URL,
+      this.baseURL,
     );
   }
 
@@ -63,12 +61,12 @@ export class GenresResolver {
       id,
       { name, description, country, year },
       this.defaultData,
-      process.env.GENRES_URL,
+      this.baseURL,
     );
   }
 
   @Mutation(() => DeleteResponseDTO)
   async deleteGenre(@Args('id') id: string) {
-    return this.genresService.delete(id, process.env.GENRES_URL);
+    return this.genresService.delete(id, this.baseURL);
   }
 }

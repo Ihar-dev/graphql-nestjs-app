@@ -5,10 +5,12 @@ import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
 import { BandCreateUpdateInput } from './interfaces/band-input.interface';
 import { MemberInputDTO } from './dto/member-input.dto';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
+import { Band } from './dto/band.dto';
 
 @Resolver()
 export class BandsResolver {
   private readonly defaultData: BandCreateUpdateDTO;
+  private readonly baseURL: string;
 
   constructor(private readonly bandsService: BandsService) {
     this.defaultData = {
@@ -17,6 +19,12 @@ export class BandsResolver {
       members: [],
       genresIds: [],
     };
+    this.baseURL = process.env.BANDS_URL;
+  }
+
+  @Query(() => Band)
+  async band(@Args('id') id: string) {
+    return this.bandsService.getBandById(id, this.defaultData, this.baseURL);
   }
 
   @Mutation(() => BandCreateUpdateDTO)
@@ -34,11 +42,7 @@ export class BandsResolver {
     if (members) inputData.members = members;
     if (website) inputData.website = website;
     if (genresIds) inputData.genresIds = genresIds;
-    return this.bandsService.create(
-      inputData,
-      this.defaultData,
-      process.env.BANDS_URL,
-    );
+    return this.bandsService.create(inputData, this.defaultData, this.baseURL);
   }
 
   @Mutation(() => BandCreateUpdateDTO)
@@ -61,12 +65,12 @@ export class BandsResolver {
       id,
       inputData,
       this.defaultData,
-      process.env.BANDS_URL,
+      this.baseURL,
     );
   }
 
   @Mutation(() => DeleteResponseDTO)
   async deleteBand(@Args('id') id: string) {
-    return this.bandsService.delete(id, process.env.BANDS_URL);
+    return this.bandsService.delete(id, this.baseURL);
   }
 }
