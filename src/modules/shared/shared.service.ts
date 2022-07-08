@@ -52,7 +52,7 @@ export class SharedService {
 
   public async delete(id: string, baseURL: string): Promise<DeleteResponseDTO> {
     const defaultResponse: DeleteResponseDTO = {
-      name: 'Response',
+      name: '',
       acknowledged: false,
       deletedCount: 0,
     };
@@ -67,6 +67,7 @@ export class SharedService {
       })
       .delete(`/${id}`, config)
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
+    if (response) response.data.name = 'Response';
     return response ? response.data : this.getCaughtErrorData(defaultResponse);
   }
 

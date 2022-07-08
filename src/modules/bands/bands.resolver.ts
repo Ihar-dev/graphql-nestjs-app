@@ -4,6 +4,7 @@ import { BandsService } from './bands.service';
 import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
 import { BandCreateUpdateInput } from './interfaces/band-input.interface';
 import { MemberInputDTO } from './dto/member-input.dto';
+import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
 @Resolver()
 export class BandsResolver {
@@ -62,5 +63,10 @@ export class BandsResolver {
       this.defaultData,
       process.env.BANDS_URL,
     );
+  }
+
+  @Mutation(() => DeleteResponseDTO)
+  async deleteBand(@Args('id') id: string) {
+    return this.bandsService.delete(id, process.env.BANDS_URL);
   }
 }
