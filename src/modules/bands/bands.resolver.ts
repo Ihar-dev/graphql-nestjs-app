@@ -1,13 +1,13 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { BandsService } from './bands.service';
-import { Band } from './dto/band.dto';
-import { BandInput } from './interfaces/band-input.interface';
+import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
+import { BandCreateUpdateInput } from './interfaces/band-input.interface';
 import { MemberInputDTO } from './dto/member-input.dto';
 
 @Resolver()
 export class BandsResolver {
-  private readonly defaultData: Band;
+  private readonly defaultData: BandCreateUpdateDTO;
 
   constructor(private readonly bandsService: BandsService) {
     this.defaultData = {
@@ -18,7 +18,7 @@ export class BandsResolver {
     };
   }
 
-  @Mutation(() => Band)
+  @Mutation(() => BandCreateUpdateDTO)
   async createBand(
     @Args('name') name: string,
     @Args('origin', { nullable: true }) origin?: string,
@@ -28,7 +28,7 @@ export class BandsResolver {
     @Args('genresIds', { nullable: true, type: () => [String] })
     genresIds?: string[],
   ) {
-    const inputData: BandInput = { name };
+    const inputData: BandCreateUpdateInput = { name };
     if (origin) inputData.origin = origin;
     if (members) inputData.members = members;
     if (website) inputData.website = website;

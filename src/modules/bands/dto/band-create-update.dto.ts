@@ -3,7 +3,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Member } from './member.dto';
 
 @ObjectType()
-export class Band {
+export class BandCreateUpdateDTO {
   @Field(() => ID)
   id: string;
 
