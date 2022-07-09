@@ -1,14 +1,53 @@
-import { Resolver, Query } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
 import { ArtistsService } from './artists.service';
-import { CreateArtistDTO } from './dto/create-artists.dto';
+import { ArtistCreateUpdateDTO } from './dto/artist-create-update.dto';
+import { ArtistCreateUpdateInput } from './interfaces/artist-input.interface';
 
 @Resolver('Artist')
 export class ArtistsResolver {
-  constructor(private readonly artistsService: ArtistsService) {}
+  private readonly defaultData: ArtistCreateUpdateDTO;
+  private readonly baseURL: string;
 
-  @Query(() => [CreateArtistDTO], { nullable: true })
-  async artists() {
-    return this.artistsService.findAll();
+  constructor(private readonly artistsService: ArtistsService) {
+    this.defaultData = {
+      id: '',
+      firstName: '',
+      secondName: '',
+      country: '',
+      bandsIds: [],
+      instruments: [],
+    };
+    this.baseURL = process.env.ARTISTS_URL;
+  }
+
+  @Mutation(() => ArtistCreateUpdateDTO)
+  async createArtist(
+    @Args('firstName') firstName: string,
+    @Args('secondName') secondName: string,
+    @Args('country') country: string,
+    @Args('middleName', { nullable: true }) middleName?: string,
+    @Args('birthDate', { nullable: true }) birthDate?: string,
+    @Args('birthPlace', { nullable: true }) birthPlace?: string,
+    @Args('bandsIds', { nullable: true, type: () => [String] })
+    bandsIds?: string[],
+    @Args('instruments', { nullable: true, type: () => [String] })
+    instruments?: string[],
+  ) {
+    const inputData: ArtistCreateUpdateInput = {
+      firstName,
+      secondName,
+      country,
+    };
+    if (middleName) inputData.middleName = middleName;
+    if (birthDate) inputData.birthDate = birthDate;
+    if (birthPlace) inputData.birthPlace = birthPlace;
+    if (bandsIds) inputData.bandsIds = bandsIds;
+    if (instruments) inputData.instruments = instruments;
+    return this.artistsService.create(
+      inputData,
+      this.defaultData,
+      this.baseURL,
+    );
   }
 }

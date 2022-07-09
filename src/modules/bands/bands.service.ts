@@ -4,7 +4,6 @@ import { SharedService } from '../shared/shared.service';
 import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
 import { Band } from './dto/band.dto';
 import { Genre } from '../genres/dto/genre.dto';
-import { Member } from './dto/member.dto';
 
 @Injectable()
 export class BandsService extends SharedService {
