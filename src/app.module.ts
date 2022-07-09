@@ -10,6 +10,7 @@ import { GenresModule } from './modules/genres/genres.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { BandsModule } from './modules/bands/bands.module';
 import { TracksModule } from './modules/tracks/tracks.module';
+import { FavouritesModule } from './modules/favourites/favourites.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TracksModule } from './modules/tracks/tracks.module';
     SharedModule,
     BandsModule,
     TracksModule,
+    FavouritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
