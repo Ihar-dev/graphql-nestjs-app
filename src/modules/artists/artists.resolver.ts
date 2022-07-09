@@ -50,4 +50,36 @@ export class ArtistsResolver {
       this.baseURL,
     );
   }
+
+  @Mutation(() => ArtistCreateUpdateDTO)
+  async updateArtist(
+    @Args('id') id: string,
+    @Args('firstName') firstName: string,
+    @Args('secondName') secondName: string,
+    @Args('country') country: string,
+    @Args('middleName', { nullable: true }) middleName?: string,
+    @Args('birthDate', { nullable: true }) birthDate?: string,
+    @Args('birthPlace', { nullable: true }) birthPlace?: string,
+    @Args('bandsIds', { nullable: true, type: () => [String] })
+    bandsIds?: string[],
+    @Args('instruments', { nullable: true, type: () => [String] })
+    instruments?: string[],
+  ) {
+    const inputData: ArtistCreateUpdateInput = {
+      firstName,
+      secondName,
+      country,
+    };
+    if (middleName) inputData.middleName = middleName;
+    if (birthDate) inputData.birthDate = birthDate;
+    if (birthPlace) inputData.birthPlace = birthPlace;
+    if (bandsIds) inputData.bandsIds = bandsIds;
+    if (instruments) inputData.instruments = instruments;
+    return this.artistsService.update(
+      id,
+      inputData,
+      this.defaultData,
+      this.baseURL,
+    );
+  }
 }
