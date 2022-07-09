@@ -3,6 +3,7 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ArtistsService } from './artists.service';
 import { ArtistCreateUpdateDTO } from './dto/artist-create-update.dto';
 import { ArtistCreateUpdateInput } from './interfaces/artist-input.interface';
+import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
 @Resolver('Artist')
 export class ArtistsResolver {
@@ -81,5 +82,10 @@ export class ArtistsResolver {
       this.defaultData,
       this.baseURL,
     );
+  }
+
+  @Mutation(() => DeleteResponseDTO)
+  async deleteArtist(@Args('id') id: string) {
+    return this.artistsService.delete(id, this.baseURL);
   }
 }
