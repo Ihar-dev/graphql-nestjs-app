@@ -6,7 +6,7 @@ import { ArtistCreateUpdateInput } from './interfaces/artist-input.interface';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 import { Artist } from './dto/artist.dto';
 
-@Resolver('Artist')
+@Resolver('Artists')
 export class ArtistsResolver {
   private readonly defaultData: ArtistCreateUpdateDTO;
   private readonly baseURL: string;

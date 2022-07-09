@@ -4,7 +4,7 @@ import { GenresService } from './genres.service';
 import { Genre } from './dto/genre.dto';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
-@Resolver()
+@Resolver('Genres')
 export class GenresResolver {
   private readonly defaultData: Genre;
   private readonly baseURL: string;

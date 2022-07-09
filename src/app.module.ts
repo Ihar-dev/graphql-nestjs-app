@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { GenresModule } from './modules/genres/genres.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { BandsModule } from './modules/bands/bands.module';
+import { TracksModule } from './modules/tracks/tracks.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { BandsModule } from './modules/bands/bands.module';
     GenresModule,
     SharedModule,
     BandsModule,
+    TracksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,7 +7,7 @@ import { MemberInputDTO } from './dto/member-input.dto';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 import { Band } from './dto/band.dto';
 
-@Resolver()
+@Resolver('Bands')
 export class BandsResolver {
   private readonly defaultData: BandCreateUpdateDTO;
   private readonly baseURL: string;
