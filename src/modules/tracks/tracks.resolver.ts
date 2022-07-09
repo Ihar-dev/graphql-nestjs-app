@@ -45,4 +45,33 @@ export class TracksResolver {
     if (bandsIds) inputData.bandsIds = bandsIds;
     return this.tracksService.create(inputData, this.defaultData, this.baseURL);
   }
+
+  @Mutation(() => TrackCreateUpdateDTO)
+  async updateTrack(
+    @Args('id') id: string,
+    @Args('title') title: string,
+    @Args('albumId') albumId: string,
+    @Args('artistsIds', { type: () => [String] }) artistsIds: string[],
+    @Args('duration', { type: () => Number }) duration: number,
+    @Args('released', { type: () => Number }) released: number,
+    @Args('genresIds', { type: () => [String] }) genresIds: string[],
+    @Args('bandsIds', { nullable: true, type: () => [String] })
+    bandsIds?: string[],
+  ) {
+    const inputData: TrackCreateUpdateInput = {
+      title,
+      albumId,
+      artistsIds,
+      duration,
+      released,
+      genresIds,
+    };
+    if (bandsIds) inputData.bandsIds = bandsIds;
+    return this.tracksService.update(
+      id,
+      inputData,
+      this.defaultData,
+      this.baseURL,
+    );
+  }
 }
