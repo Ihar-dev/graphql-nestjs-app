@@ -4,6 +4,7 @@ import { ArtistsService } from './artists.service';
 import { ArtistCreateUpdateDTO } from './dto/artist-create-update.dto';
 import { ArtistCreateUpdateInput } from './interfaces/artist-input.interface';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
+import { Artist } from './dto/artist.dto';
 
 @Resolver('Artist')
 export class ArtistsResolver {
@@ -20,6 +21,15 @@ export class ArtistsResolver {
       instruments: [],
     };
     this.baseURL = process.env.ARTISTS_URL;
+  }
+
+  @Query(() => Artist)
+  async artist(@Args('id') id: string) {
+    return this.artistsService.getArtistById(
+      id,
+      this.defaultData,
+      this.baseURL,
+    );
   }
 
   @Mutation(() => ArtistCreateUpdateDTO)

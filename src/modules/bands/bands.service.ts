@@ -1,24 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
 import { SharedService } from '../shared/shared.service';
-import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
+/* import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
 import { Band } from './dto/band.dto';
-import { Genre } from '../genres/dto/genre.dto';
+import { Genre } from '../genres/dto/genre.dto'; */
 
 @Injectable()
 export class BandsService extends SharedService {
-  private readonly defaultData: Band;
-  private readonly genreDefaultData: Genre;
+  /* private readonly genreDefaultData: Genre;
   private readonly genreBaseURL: string;
 
   constructor() {
     super();
-    this.defaultData = {
-      id: '',
-      name: '',
-      members: [],
-      genres: [],
-    };
     this.genreDefaultData = {
       id: '',
       name: '',
@@ -95,5 +88,5 @@ export class BandsService extends SharedService {
       this.genreBaseURL,
     );
     return genre;
-  }
+  } */
 }
