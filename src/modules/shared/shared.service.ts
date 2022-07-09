@@ -108,7 +108,7 @@ export class SharedService {
       response.data.items.forEach(element => (element.id = element._id));
     return response
       ? response.data.items
-      : this.getCaughtErrorArray(defaultData);
+      : this.getCaughtErrorArray([defaultData]);
   }
 
   private getCaughtErrorArray<T>(defaultData: T): T {

@@ -41,18 +41,7 @@ export class BandsService extends SharedService {
       baseURL,
     );
 
-    const band = this.defaultData;
-
-    if (initialBand.id) band.id = initialBand.id;
-    if (initialBand.name) band.name = initialBand.name;
-    if (initialBand.origin) band.origin = initialBand.origin;
-    else band.origin = null;
-    if (initialBand.members) band.members = initialBand.members;
-    if (initialBand.website) band.website = initialBand.website;
-    else band.website = null;
-    band.genres = await Promise.all(
-      initialBand.genresIds.map(id => this.getGenre(id)),
-    );
+    const band = await this.getBand(initialBand);
 
     return band;
   }
@@ -70,45 +59,34 @@ export class BandsService extends SharedService {
       offset,
     );
 
-    const bands: Band[] = [
-      {
-        id: '',
-        name: '',
-        origin: '',
-        members: [],
-        website: '',
-        genres: [],
-      },
-    ];
-
-    await Promise.all(
-      initialBands.map(async (initialBand, index) => {
-        return new Promise(async resolve => {
-          const band = {
-            id: '',
-            name: '',
-            origin: '',
-            members: [],
-            website: '',
-            genres: [],
-          };
-
-          if (initialBand.id) band.id = initialBand.id;
-          if (initialBand.name) band.name = initialBand.name;
-          if (initialBand.origin) band.origin = initialBand.origin;
-          else band.origin = null;
-          if (initialBand.members) band.members = initialBand.members;
-          if (initialBand.website) band.website = initialBand.website;
-          else band.website = null;
-          band.genres = await Promise.all(
-            initialBand.genresIds.map(id => this.getGenre(id)),
-          );
-          bands[index] = band;
-          resolve(null);
-        });
-      }),
+    const bands: Band[] = await Promise.all(
+      initialBands.map(initialBand => this.getBand(initialBand)),
     );
+
     return bands;
+  }
+
+  private async getBand(initialBand: BandCreateUpdateDTO): Promise<Band> {
+    const band = {
+      id: '',
+      name: '',
+      origin: '',
+      members: [],
+      website: '',
+      genres: [],
+    };
+
+    if (initialBand.id) band.id = initialBand.id;
+    if (initialBand.name) band.name = initialBand.name;
+    if (initialBand.origin) band.origin = initialBand.origin;
+    else band.origin = null;
+    if (initialBand.members) band.members = initialBand.members;
+    if (initialBand.website) band.website = initialBand.website;
+    else band.website = null;
+    band.genres = await Promise.all(
+      initialBand.genresIds.map(id => this.getGenre(id)),
+    );
+    return band;
   }
 
   private async getGenre(id: string): Promise<Genre> {
