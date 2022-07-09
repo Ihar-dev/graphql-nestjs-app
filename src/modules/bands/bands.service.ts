@@ -50,25 +50,10 @@ export class BandsService extends SharedService {
     if (initialBand.members) band.members = initialBand.members;
     if (initialBand.website) band.website = initialBand.website;
     else band.website = null;
-    band.genres = [];
+    band.genres = await Promise.all(
+      initialBand.genresIds.map(id => this.getGenre(id)),
+    );
 
-    const promiseArray = [];
-
-    initialBand.genresIds.forEach(async id => {
-      promiseArray.push(
-        new Promise(async resolve => {
-          const genre: Genre = await super.getById(
-            id,
-            this.genreDefaultData,
-            this.genreBaseURL,
-          );
-          band.genres.push(genre);
-          resolve(null);
-        }),
-      );
-    });
-
-    await Promise.all([]);
     return band;
   }
 
@@ -115,20 +100,8 @@ export class BandsService extends SharedService {
           if (initialBand.members) band.members = initialBand.members;
           if (initialBand.website) band.website = initialBand.website;
           else band.website = null;
-          band.genres = [];
-
-          await Promise.all(
-            initialBand.genresIds.map(id => {
-              return new Promise(async resolve => {
-                const genre: Genre = await super.getById(
-                  id,
-                  this.genreDefaultData,
-                  this.genreBaseURL,
-                );
-                band.genres.push(genre);
-                resolve(null);
-              });
-            }),
+          band.genres = await Promise.all(
+            initialBand.genresIds.map(id => this.getGenre(id)),
           );
           bands[index] = band;
           resolve(null);
@@ -136,5 +109,14 @@ export class BandsService extends SharedService {
       }),
     );
     return bands;
+  }
+
+  private async getGenre(id: string): Promise<Genre> {
+    const genre: Genre = await super.getById(
+      id,
+      this.genreDefaultData,
+      this.genreBaseURL,
+    );
+    return genre;
   }
 }
