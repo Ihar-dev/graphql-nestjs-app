@@ -72,4 +72,24 @@ export class ArtistsService extends SharedService {
     else artist.instruments = null;
     return artist;
   }
+
+  public async getAllArtists(
+    defaultData: ArtistCreateUpdateDTO,
+    baseURL: string,
+    limit: number,
+    offset: number,
+  ): Promise<Artist[]> {
+    const initialArtists = await super.getAll(
+      defaultData,
+      baseURL,
+      limit,
+      offset,
+    );
+
+    const artists: Artist[] = await Promise.all(
+      initialArtists.map(initialArtist => this.getArtist(initialArtist)),
+    );
+
+    return artists;
+  }
 }

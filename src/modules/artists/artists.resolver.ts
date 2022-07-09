@@ -32,6 +32,16 @@ export class ArtistsResolver {
     );
   }
 
+  @Query(() => [Artist])
+  async artists(@Args('limit') limit: number, @Args('offset') offset: number) {
+    return this.artistsService.getAllArtists(
+      this.defaultData,
+      this.baseURL,
+      limit,
+      offset,
+    );
+  }
+
   @Mutation(() => ArtistCreateUpdateDTO)
   async createArtist(
     @Args('firstName') firstName: string,
