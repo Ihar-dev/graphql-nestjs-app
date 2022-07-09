@@ -3,6 +3,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { TracksService } from './tracks.service';
 import { TrackCreateUpdateDTO } from './dto/track-create-update.dto';
 import { TrackCreateUpdateInput } from './interfaces/track-input.interface';
+import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
 @Resolver('Tracks')
 export class TracksResolver {
@@ -73,5 +74,10 @@ export class TracksResolver {
       this.defaultData,
       this.baseURL,
     );
+  }
+
+  @Mutation(() => DeleteResponseDTO)
+  async deleteTrack(@Args('id') id: string) {
+    return this.tracksService.delete(id, this.baseURL);
   }
 }
