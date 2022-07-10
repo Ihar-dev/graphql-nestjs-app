@@ -3,6 +3,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AlbumsService } from './albums.service';
 import { AlbumCreateUpdateDTO } from './dto/album-create-update.dto';
 import { AlbumCreateUpdateInput } from './interfaces/album-input.interface';
+import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
 @Resolver('Albums')
 export class AlbumsResolver {
@@ -77,5 +78,10 @@ export class AlbumsResolver {
       this.defaultData,
       this.baseURL,
     );
+  }
+
+  @Mutation(() => DeleteResponseDTO)
+  async deleteAlbum(@Args('id') id: string) {
+    return this.albumsService.delete(id, this.baseURL);
   }
 }
