@@ -1,8 +1,9 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { FavouriteAddDTO } from './dto/favourite-add.dto';
 import { FavouritesService } from './favourites.service';
 import { FavouriteAddInput } from './interfaces/favourite-input.interface';
+import { Favourites } from './dto/favourites.dto';
 
 @Resolver()
 export class FavouritesResolver {
@@ -15,6 +16,11 @@ export class FavouritesResolver {
       userId: '',
     };
     this.baseURL = process.env.FAVORITES_URL;
+  }
+
+  @Query(() => Favourites)
+  async favourites() {
+    return this.favouritesService.getFavourites(this.baseURL);
   }
 
   @Mutation(() => FavouriteAddDTO)

@@ -17,12 +17,12 @@ const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
 @Injectable()
 export class SharedService {
   private caughtErrorMessage = NO_SERVER_RESPONSE_VALUE;
-  private readonly genreDefaultData: Genre;
-  private readonly genreBaseURL: string;
-  private readonly BandsDefaultData: BandCreateUpdateDTO;
-  private readonly BandsBaseURL: string;
-  private readonly artistsDefaultData: ArtistCreateUpdateDTO;
-  private readonly artistsBaseURL: string;
+  public readonly genreDefaultData: Genre;
+  public readonly genreBaseURL: string;
+  public readonly BandsDefaultData: BandCreateUpdateDTO;
+  public readonly BandsBaseURL: string;
+  public readonly artistsDefaultData: ArtistCreateUpdateDTO;
+  public readonly artistsBaseURL: string;
 
   constructor() {
     this.genreDefaultData = {
@@ -124,7 +124,7 @@ export class SharedService {
       })
       .get(`/${id}`)
       .catch(err => this.setCaughtErrorMessage(err.name, err.message));
-    if (response) response.data.id = response.data._id;
+    if (response && response.data._id) response.data.id = response.data._id;
     return response ? response.data : this.getCaughtErrorData(defaultData);
   }
 
@@ -169,6 +169,10 @@ export class SharedService {
 
   public setCaughtErrorMessage(name: string, message: string): void {
     this.caughtErrorMessage = `Response name: ${name}, message: ${message}`;
+  }
+
+  public async getBandByIdForFavourites(id: string): Promise<Band> {
+    return this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL);
   }
 
   public async getBandById(
@@ -337,11 +341,13 @@ export class SharedService {
     if (initialArtist.birthPlace) artist.birthPlace = initialArtist.birthPlace;
     else artist.birthPlace = null;
     if (initialArtist.country) artist.country = initialArtist.country;
-    artist.bands = await Promise.all(
-      initialArtist.bandsIds.map(id =>
-        this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL),
-      ),
-    );
+    if (initialArtist.bandsIds) {
+      artist.bands = await Promise.all(
+        initialArtist.bandsIds.map(id =>
+          this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL),
+        ),
+      );
+    }
     if (initialArtist.instruments)
       artist.instruments = initialArtist.instruments;
     else artist.instruments = null;
@@ -365,13 +371,15 @@ export class SharedService {
     if (initialBand.members) band.members = initialBand.members;
     if (initialBand.website) band.website = initialBand.website;
     else band.website = null;
-    band.genres = await Promise.all(
-      initialBand.genresIds.map(id => this.getGenre(id)),
-    );
+    if (initialBand.genresIds) {
+      band.genres = await Promise.all(
+        initialBand.genresIds.map(id => this.getGenre(id)),
+      );
+    }
     return band;
   }
 
-  private async getGenre(id: string): Promise<Genre> {
+  public async getGenre(id: string): Promise<Genre> {
     const genre: Genre = await this.getById(
       id,
       this.genreDefaultData,
