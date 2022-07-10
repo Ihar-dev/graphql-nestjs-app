@@ -13,7 +13,7 @@ export class Album {
   @Field()
   readonly name: string;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   readonly released: number;
 
   @Field(() => [Artist])
@@ -22,12 +22,12 @@ export class Album {
   @Field(() => [Band])
   readonly bands: Band[];
 
-  @Field(() => [Track])
-  readonly tracks: Track[];
+  /* @Field(() => [Track], { nullable: true })
+  readonly tracks: Track[]; */
 
   @Field(() => [Genre])
   readonly genres: Genre[];
 
-  @Field()
+  @Field({ nullable: true })
   readonly image: string;
 }

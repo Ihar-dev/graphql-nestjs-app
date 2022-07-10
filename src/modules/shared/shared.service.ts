@@ -9,6 +9,8 @@ import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
 import { Track } from '../tracks/dto/track.dto';
 import { ArtistCreateUpdateDTO } from '../artists/dto/artist-create-update.dto';
 import { Artist } from '../artists/dto/artist.dto';
+import { AlbumCreateUpdateDTO } from '../albums/dto/album-create-update.dto';
+import { Album } from '../albums/dto/album.dto';
 
 const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
 
@@ -202,6 +204,62 @@ export class SharedService {
     return track;
   }
 
+  public async getAlbumById(
+    id: string,
+    defaultData: AlbumCreateUpdateDTO,
+    baseURL: string,
+    circle: number,
+  ): Promise<Album> {
+    const initialAlbum: AlbumCreateUpdateDTO = await this.getById(
+      id,
+      defaultData,
+      baseURL,
+    );
+
+    const album = await this.getAlbum(initialAlbum, circle);
+
+    return album;
+  }
+
+  public async getAlbum(
+    initialAlbum: AlbumCreateUpdateDTO,
+    circle: number,
+  ): Promise<Album> {
+    circle--;
+    const album = {
+      id: '',
+      name: '',
+      released: 0,
+      artists: [],
+      bands: [],
+      tracks: [],
+      genres: [],
+      image: '',
+    };
+
+    if (initialAlbum.id) album.id = initialAlbum.id;
+    if (initialAlbum.name) album.name = initialAlbum.name;
+    if (initialAlbum.released) album.released = initialAlbum.released;
+    else album.released = null;
+    album.artists = await Promise.all(
+      initialAlbum.artistsIds.map(id =>
+        this.getArtistById(id, this.artistsDefaultData, this.artistsBaseURL),
+      ),
+    );
+    album.bands = await Promise.all(
+      initialAlbum.bandsIds.map(id =>
+        this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL),
+      ),
+    );
+    //--------------------------------
+    album.genres = await Promise.all(
+      initialAlbum.genresIds.map(id => this.getGenre(id)),
+    );
+    if (initialAlbum.image) album.image = initialAlbum.image;
+    else album.image = null;
+    return album;
+  }
+
   public async getTrack(
     initialTrack: TrackCreateUpdateDTO,
     circle: number,
@@ -220,6 +278,7 @@ export class SharedService {
 
     if (initialTrack.id) track.id = initialTrack.id;
     if (initialTrack.title) track.title = initialTrack.title;
+    //---------------------------------------
     track.artists = await Promise.all(
       initialTrack.artistsIds.map(id =>
         this.getArtistById(id, this.artistsDefaultData, this.artistsBaseURL),

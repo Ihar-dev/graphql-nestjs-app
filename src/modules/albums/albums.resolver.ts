@@ -1,9 +1,12 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { AlbumsService } from './albums.service';
 import { AlbumCreateUpdateDTO } from './dto/album-create-update.dto';
 import { AlbumCreateUpdateInput } from './interfaces/album-input.interface';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
+import { Album } from './dto/album.dto';
+
+const CIRCLE_LIMIT = 10;
 
 @Resolver('Albums')
 export class AlbumsResolver {
@@ -20,6 +23,16 @@ export class AlbumsResolver {
       genresIds: [],
     };
     this.baseURL = process.env.ALBUMS_URL;
+  }
+
+  @Query(() => Album)
+  async album(@Args('id') id: string) {
+    return this.albumsService.getAlbumById(
+      id,
+      this.defaultData,
+      this.baseURL,
+      CIRCLE_LIMIT,
+    );
   }
 
   @Mutation(() => AlbumCreateUpdateDTO)
