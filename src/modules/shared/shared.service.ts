@@ -133,7 +133,7 @@ export class SharedService {
     return defaultData;
   }
 
-  private getCaughtErrorData<T>(defaultData: T): T {
+  public getCaughtErrorData<T>(defaultData: T): T {
     Object.keys(defaultData).forEach(key => {
       if (typeof defaultData[key] === 'string')
         defaultData[key] = this.caughtErrorMessage;
@@ -141,7 +141,7 @@ export class SharedService {
     return defaultData;
   }
 
-  private setCaughtErrorMessage(name: string, message: string): void {
+  public setCaughtErrorMessage(name: string, message: string): void {
     this.caughtErrorMessage = `Response name: ${name}, message: ${message}`;
   }
 
