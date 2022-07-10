@@ -42,4 +42,17 @@ export class FavouritesResolver {
       this.baseURL,
     );
   }
+
+  @Mutation(() => FavouriteAddDTO)
+  async addArtistToFavourites(@Args('id') id: string) {
+    const inputData: FavouriteAddInput = {
+      id,
+      type: 'artists',
+    };
+    return this.favouritesService.add(
+      inputData,
+      this.defaultData,
+      this.baseURL,
+    );
+  }
 }
