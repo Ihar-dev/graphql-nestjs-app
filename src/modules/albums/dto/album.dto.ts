@@ -3,18 +3,18 @@ import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Band } from '../../bands/dto/band.dto';
 import { Artist } from '../../artists/dto/artist.dto';
 import { Genre } from '../../genres/dto/genre.dto';
-import { Album } from '../../albums/dto/album.dto';
+import { Track } from '../../tracks/dto/track.dto';
 
 @ObjectType()
-export class Track {
+export class Album {
   @Field(() => ID)
   id: string;
 
   @Field()
-  readonly title: string;
+  readonly name: string;
 
-  @Field()
-  readonly album: Album;
+  @Field(() => Int)
+  readonly released: number;
 
   @Field(() => [Artist])
   readonly artists: Artist[];
@@ -22,12 +22,12 @@ export class Track {
   @Field(() => [Band])
   readonly bands: Band[];
 
-  @Field(() => Int)
-  readonly duration: number;
-
-  @Field(() => Int)
-  readonly released: number;
+  @Field(() => [Track])
+  readonly tracks: Track[];
 
   @Field(() => [Genre])
   readonly genres: Genre[];
+
+  @Field()
+  readonly image: string;
 }
