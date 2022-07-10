@@ -46,4 +46,36 @@ export class AlbumsResolver {
     if (image) inputData.image = image;
     return this.albumsService.create(inputData, this.defaultData, this.baseURL);
   }
+
+  @Mutation(() => AlbumCreateUpdateDTO)
+  async updateAlbum(
+    @Args('id') id: string,
+    @Args('name') name: string,
+    @Args('released', { nullable: true }) released?: number,
+    @Args('artistsIds', { nullable: true, type: () => [String] })
+    artistsIds?: string[],
+    @Args('bandsIds', { nullable: true, type: () => [String] })
+    bandsIds?: string[],
+    @Args('trackIds', { nullable: true, type: () => [String] })
+    trackIds?: string[],
+    @Args('genresIds', { nullable: true, type: () => [String] })
+    genresIds?: string[],
+    @Args('image', { nullable: true }) image?: string,
+  ) {
+    const inputData: AlbumCreateUpdateInput = {
+      name,
+    };
+    if (released) inputData.released = released;
+    if (artistsIds) inputData.artistsIds = artistsIds;
+    if (bandsIds) inputData.bandsIds = bandsIds;
+    if (trackIds) inputData.trackIds = trackIds;
+    if (genresIds) inputData.genresIds = genresIds;
+    if (image) inputData.image = image;
+    return this.albumsService.update(
+      id,
+      inputData,
+      this.defaultData,
+      this.baseURL,
+    );
+  }
 }
