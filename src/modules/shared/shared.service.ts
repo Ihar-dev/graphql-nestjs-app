@@ -290,22 +290,7 @@ export class SharedService {
     return artist;
   }
 
-  public async getAllBands(
-    defaultData: BandCreateUpdateDTO,
-    baseURL: string,
-    limit: number,
-    offset: number,
-  ): Promise<Band[]> {
-    const initialBands = await this.getAll(defaultData, baseURL, limit, offset);
-
-    const bands: Band[] = await Promise.all(
-      initialBands.map(initialBand => this.getBand(initialBand)),
-    );
-
-    return bands;
-  }
-
-  private async getBand(initialBand: BandCreateUpdateDTO): Promise<Band> {
+  public async getBand(initialBand: BandCreateUpdateDTO): Promise<Band> {
     const band = {
       id: '',
       name: '',
