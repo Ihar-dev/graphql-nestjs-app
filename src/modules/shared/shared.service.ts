@@ -227,12 +227,11 @@ export class SharedService {
   ): Promise<Album> {
     circle--;
     const album = {
-      id: '',
+      id: '22',
       name: '',
       released: 0,
       artists: [],
       bands: [],
-      tracks: [],
       genres: [],
       image: '',
     };

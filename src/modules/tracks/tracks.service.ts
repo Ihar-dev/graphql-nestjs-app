@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { SharedService } from '../shared/shared.service';
-import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
-import { Track } from '../tracks/dto/track.dto';
+import { TrackCreateUpdateDTO } from './dto/track-create-update.dto';
+import { Track } from './dto/track.dto';
 
 @Injectable()
 export class TracksService extends SharedService {

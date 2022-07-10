@@ -35,6 +35,17 @@ export class AlbumsResolver {
     );
   }
 
+  @Query(() => [Album])
+  async albums(@Args('limit') limit: number, @Args('offset') offset: number) {
+    return this.albumsService.getAllAlbums(
+      this.defaultData,
+      this.baseURL,
+      limit,
+      offset,
+      CIRCLE_LIMIT,
+    );
+  }
+
   @Mutation(() => AlbumCreateUpdateDTO)
   async createAlbum(
     @Args('name') name: string,
