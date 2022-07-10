@@ -242,17 +242,18 @@ export class SharedService {
   ): Promise<Album> {
     circle--;
     const album = {
-      id: '22',
+      id: '',
       name: '',
       released: 0,
       artists: [],
       bands: [],
-      tracks: [],
+      trackIds: [],
       genres: [],
       image: '',
     };
 
     if (initialAlbum.id) album.id = initialAlbum.id;
+    if (initialAlbum.trackIds) album.trackIds = initialAlbum.trackIds;
     if (initialAlbum.name) album.name = initialAlbum.name;
     if (initialAlbum.released) album.released = initialAlbum.released;
     else album.released = null;
