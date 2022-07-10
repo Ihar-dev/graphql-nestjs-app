@@ -55,4 +55,17 @@ export class FavouritesResolver {
       this.baseURL,
     );
   }
+
+  @Mutation(() => FavouriteAddDTO)
+  async addGenreToFavourites(@Args('id') id: string) {
+    const inputData: FavouriteAddInput = {
+      id,
+      type: 'genres',
+    };
+    return this.favouritesService.add(
+      inputData,
+      this.defaultData,
+      this.baseURL,
+    );
+  }
 }
