@@ -6,6 +6,8 @@ import { TrackCreateUpdateInput } from './interfaces/track-input.interface';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 import { Track } from './dto/track.dto';
 
+const CIRCLE_LIMIT = 10;
+
 @Resolver('Tracks')
 export class TracksResolver {
   private readonly defaultData: TrackCreateUpdateDTO;
@@ -27,7 +29,23 @@ export class TracksResolver {
 
   @Query(() => Track)
   async track(@Args('id') id: string) {
-    return this.tracksService.getTrackById(id, this.defaultData, this.baseURL);
+    return this.tracksService.getTrackById(
+      id,
+      this.defaultData,
+      this.baseURL,
+      CIRCLE_LIMIT,
+    );
+  }
+
+  @Query(() => [Track])
+  async tracks(@Args('limit') limit: number, @Args('offset') offset: number) {
+    return this.tracksService.getAllTracks(
+      this.defaultData,
+      this.baseURL,
+      limit,
+      offset,
+      CIRCLE_LIMIT,
+    );
   }
 
   @Mutation(() => TrackCreateUpdateDTO)

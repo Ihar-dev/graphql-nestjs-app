@@ -185,6 +185,23 @@ export class SharedService {
     return band;
   }
 
+  public async getTrackById(
+    id: string,
+    defaultData: TrackCreateUpdateDTO,
+    baseURL: string,
+    circle: number,
+  ): Promise<Track> {
+    const initialTrack: TrackCreateUpdateDTO = await this.getById(
+      id,
+      defaultData,
+      baseURL,
+    );
+
+    const track = await this.getTrack(initialTrack, circle);
+
+    return track;
+  }
+
   public async getTrack(
     initialTrack: TrackCreateUpdateDTO,
     circle: number,

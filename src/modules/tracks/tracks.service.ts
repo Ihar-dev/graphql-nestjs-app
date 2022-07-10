@@ -4,23 +4,26 @@ import { SharedService } from '../shared/shared.service';
 import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
 import { Track } from '../tracks/dto/track.dto';
 
-const CIRCLE_LIMIT = 10;
-
 @Injectable()
 export class TracksService extends SharedService {
-  public async getTrackById(
-    id: string,
+  public async getAllTracks(
     defaultData: TrackCreateUpdateDTO,
     baseURL: string,
-  ): Promise<Track> {
-    const initialTrack: TrackCreateUpdateDTO = await super.getById(
-      id,
+    limit: number,
+    offset: number,
+    circle: number,
+  ): Promise<Track[]> {
+    const initialTracks = await super.getAll(
       defaultData,
       baseURL,
+      limit,
+      offset,
     );
 
-    const track = await super.getTrack(initialTrack, CIRCLE_LIMIT);
+    const artists: Track[] = await Promise.all(
+      initialTracks.map(initialTrack => super.getTrack(initialTrack, circle)),
+    );
 
-    return track;
+    return artists;
   }
 }
