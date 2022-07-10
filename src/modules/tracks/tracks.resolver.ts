@@ -1,9 +1,10 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { TracksService } from './tracks.service';
 import { TrackCreateUpdateDTO } from './dto/track-create-update.dto';
 import { TrackCreateUpdateInput } from './interfaces/track-input.interface';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
+import { Track } from './dto/track.dto';
 
 @Resolver('Tracks')
 export class TracksResolver {
@@ -22,6 +23,11 @@ export class TracksResolver {
       genresIds: [],
     };
     this.baseURL = process.env.TRACKS_URL;
+  }
+
+  @Query(() => Track)
+  async track(@Args('id') id: string) {
+    return this.tracksService.getTrackById(id, this.defaultData, this.baseURL);
   }
 
   @Mutation(() => TrackCreateUpdateDTO)
