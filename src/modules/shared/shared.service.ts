@@ -23,6 +23,8 @@ export class SharedService {
   public readonly BandsBaseURL: string;
   public readonly artistsDefaultData: ArtistCreateUpdateDTO;
   public readonly artistsBaseURL: string;
+  private readonly AlbumDefaultData: AlbumCreateUpdateDTO;
+  private readonly AlbumsBaseURL: string;
 
   constructor() {
     this.genreDefaultData = {
@@ -49,6 +51,15 @@ export class SharedService {
       instruments: [],
     };
     this.artistsBaseURL = process.env.ARTISTS_URL;
+    this.AlbumDefaultData = {
+      id: '',
+      name: '',
+      artistsIds: [],
+      bandsIds: [],
+      trackIds: [],
+      genresIds: [],
+    };
+    this.AlbumsBaseURL = process.env.ALBUMS_URL;
   }
 
   public async create<T, Q>(
@@ -236,6 +247,7 @@ export class SharedService {
       released: 0,
       artists: [],
       bands: [],
+      tracks: [],
       genres: [],
       image: '',
     };
@@ -279,24 +291,37 @@ export class SharedService {
       genres: [],
     };
 
+    if (circle > 0 && initialTrack.albumId)
+      track.album = await this.getAlbumById(
+        initialTrack.albumId,
+        this.AlbumDefaultData,
+        this.AlbumsBaseURL,
+        circle,
+      );
     if (initialTrack.id) track.id = initialTrack.id;
     if (initialTrack.title) track.title = initialTrack.title;
     //---------------------------------------
-    track.artists = await Promise.all(
-      initialTrack.artistsIds.map(id =>
-        this.getArtistById(id, this.artistsDefaultData, this.artistsBaseURL),
-      ),
-    );
-    track.bands = await Promise.all(
-      initialTrack.bandsIds.map(id =>
-        this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL),
-      ),
-    );
+    if (circle > 0 && initialTrack.artistsIds) {
+      track.artists = await Promise.all(
+        initialTrack.artistsIds.map(id =>
+          this.getArtistById(id, this.artistsDefaultData, this.artistsBaseURL),
+        ),
+      );
+    }
+    if (circle > 0 && initialTrack.bandsIds) {
+      track.bands = await Promise.all(
+        initialTrack.bandsIds.map(id =>
+          this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL),
+        ),
+      );
+    }
     if (initialTrack.duration) track.duration = initialTrack.duration;
     if (initialTrack.released) track.released = initialTrack.released;
-    track.genres = await Promise.all(
-      initialTrack.genresIds.map(id => this.getGenre(id)),
-    );
+    if (circle > 0 && initialTrack.genresIds) {
+      track.genres = await Promise.all(
+        initialTrack.genresIds.map(id => this.getGenre(id)),
+      );
+    }
     return track;
   }
 
