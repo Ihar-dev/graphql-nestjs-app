@@ -18,10 +18,10 @@ export class FavouritesResolver {
     this.baseURL = process.env.FAVORITES_URL;
   }
 
-  @Query(() => Favourites)
+  /* @Query(() => Favourites)
   async favourites() {
     return this.favouritesService.getFavourites(this.baseURL);
-  }
+  } */
 
   @Mutation(() => FavouriteAddDTO)
   async addTrackToFavourites(@Args('id') id: string) {

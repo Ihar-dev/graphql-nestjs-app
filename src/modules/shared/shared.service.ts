@@ -182,22 +182,22 @@ export class SharedService {
     this.caughtErrorMessage = `Response name: ${name}, message: ${message}`;
   }
 
-  public async getBandByIdForFavourites(id: string): Promise<Band> {
+  /* public async getBandByIdForFavourites(id: string): Promise<Band> {
     return this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL);
-  }
+  } */
 
   public async getBandById(
     id: string,
     defaultData: BandCreateUpdateDTO,
     baseURL: string,
-  ): Promise<Band> {
-    const initialBand: BandCreateUpdateDTO = await this.getById(
+  ): Promise<BandCreateUpdateDTO> {
+    const band: BandCreateUpdateDTO = await this.getById(
       id,
       defaultData,
       baseURL,
     );
 
-    const band = await this.getBand(initialBand);
+    //const band = await this.getBand(initialBand);
 
     return band;
   }
@@ -380,7 +380,7 @@ export class SharedService {
     return artist;
   }
 
-  public async getBand(initialBand: BandCreateUpdateDTO): Promise<Band> {
+  /* public async getBand(initialBand: BandCreateUpdateDTO): Promise<Band> {
     const band = {
       id: '',
       name: '',
@@ -403,7 +403,7 @@ export class SharedService {
       );
     }
     return band;
-  }
+  } */
 
   public async getGenre(id: string): Promise<Genre> {
     const genre: Genre = await this.getById(

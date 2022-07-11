@@ -70,7 +70,7 @@ export class FavouritesService extends SharedService {
     return response ? response.data : super.getCaughtErrorData(defaultData);
   }
 
-  public async getFavourites(baseURL: string): Promise<Favourites> {
+  /* public async getFavourites(baseURL: string): Promise<Favourites> {
     const config = {
       headers: {
         Authorization: `Bearer ${process.env.JWT}`,
@@ -109,5 +109,5 @@ export class FavouritesService extends SharedService {
     return response
       ? response.data
       : super.getCaughtErrorData(this.FavouritesDefaultData);
-  }
+  } */
 }

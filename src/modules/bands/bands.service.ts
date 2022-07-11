@@ -11,12 +11,12 @@ export class BandsService extends SharedService {
     baseURL: string,
     limit: number,
     offset: number,
-  ): Promise<Band[]> {
-    const initialBands = await this.getAll(defaultData, baseURL, limit, offset);
+  ): Promise<BandCreateUpdateDTO[]> {
+    const bands = await this.getAll(defaultData, baseURL, limit, offset);
 
-    const bands: Band[] = await Promise.all(
+    /* const bands: Band[] = await Promise.all(
       initialBands.map(initialBand => super.getBand(initialBand)),
-    );
+    ); */
 
     return bands;
   }
