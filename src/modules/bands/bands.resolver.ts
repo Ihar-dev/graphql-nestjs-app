@@ -15,7 +15,7 @@ import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 import { Band } from './dto/band.dto';
 import { Genre } from '../genres/dto/genre.dto';
 
-@Resolver(of => Band)
+@Resolver(() => Band)
 export class BandsResolver {
   private readonly defaultData: BandCreateUpdateDTO;
   private readonly baseURL: string;
@@ -36,11 +36,11 @@ export class BandsResolver {
   }
 
   @ResolveField(() => [Genre])
-  async genres(@Parent() band): Promise<Genre[]> {
+  async genres(@Parent() band: BandCreateUpdateDTO): Promise<Genre[]> {
     const { genresIds } = band;
     return await Promise.all(
       genresIds.map(id => {
-        return this.bandsService.getGenre(id);
+        return this.bandsService.getGenreById(id);
       }),
     );
   }

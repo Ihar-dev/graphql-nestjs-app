@@ -1,15 +1,26 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 
 import { ArtistsService } from './artists.service';
 import { ArtistCreateUpdateDTO } from './dto/artist-create-update.dto';
 import { ArtistCreateUpdateInput } from './interfaces/artist-input.interface';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 import { Artist } from './dto/artist.dto';
+import { Band } from '../bands/dto/band.dto';
+import { BandCreateUpdateDTO } from '../bands/dto/band-create-update.dto';
 
-@Resolver('Artists')
+@Resolver(() => Artist)
 export class ArtistsResolver {
   private readonly defaultData: ArtistCreateUpdateDTO;
   private readonly baseURL: string;
+  public readonly BandsDefaultData: BandCreateUpdateDTO;
+  public readonly BandsBaseURL: string;
 
   constructor(private readonly artistsService: ArtistsService) {
     this.defaultData = {
@@ -21,14 +32,37 @@ export class ArtistsResolver {
       instruments: [],
     };
     this.baseURL = process.env.ARTISTS_URL;
+    this.BandsDefaultData = {
+      id: '',
+      name: '',
+      members: [],
+      genresIds: [],
+    };
+    this.BandsBaseURL = process.env.BANDS_URL;
   }
 
   @Query(() => Artist)
-  async artist(@Args('id') id: string) {
+  async artist(@Args('id') id: string): Promise<ArtistCreateUpdateDTO> {
     return this.artistsService.getArtistById(
       id,
       this.defaultData,
       this.baseURL,
+    );
+  }
+
+  @ResolveField(() => [Band])
+  async bands(
+    @Parent() artist: ArtistCreateUpdateDTO,
+  ): Promise<BandCreateUpdateDTO[]> {
+    const { bandsIds } = artist;
+    return await Promise.all(
+      bandsIds.map(id => {
+        return this.artistsService.getBandById(
+          id,
+          this.BandsDefaultData,
+          this.BandsBaseURL,
+        );
+      }),
     );
   }
 

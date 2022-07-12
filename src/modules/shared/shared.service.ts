@@ -269,7 +269,7 @@ export class SharedService {
     );
     //--------------------------------
     album.genres = await Promise.all(
-      initialAlbum.genresIds.map(id => this.getGenre(id)),
+      initialAlbum.genresIds.map(id => this.getGenreById(id)),
     );
     if (initialAlbum.image) album.image = initialAlbum.image;
     else album.image = null;
@@ -320,7 +320,7 @@ export class SharedService {
     if (initialTrack.released) track.released = initialTrack.released;
     if (circle > 0 && initialTrack.genresIds) {
       track.genres = await Promise.all(
-        initialTrack.genresIds.map(id => this.getGenre(id)),
+        initialTrack.genresIds.map(id => this.getGenreById(id)),
       );
     }
     return track;
@@ -330,14 +330,14 @@ export class SharedService {
     id: string,
     defaultData: ArtistCreateUpdateDTO,
     baseURL: string,
-  ): Promise<Artist> {
-    const initialArtist: ArtistCreateUpdateDTO = await this.getById(
+  ): Promise<ArtistCreateUpdateDTO> {
+    const artist: ArtistCreateUpdateDTO = await this.getById(
       id,
       defaultData,
       baseURL,
     );
 
-    const artist = await this.getArtist(initialArtist);
+    // const artist = await this.getArtist(initialArtist);
 
     return artist;
   }
@@ -399,13 +399,13 @@ export class SharedService {
     else band.website = null;
     if (initialBand.genresIds) {
       band.genres = await Promise.all(
-        initialBand.genresIds.map(id => this.getGenre(id)),
+        initialBand.genresIds.map(id => this.getGenreById(id)),
       );
     }
     return band;
   } */
 
-  public async getGenre(id: string): Promise<Genre> {
+  public async getGenreById(id: string): Promise<Genre> {
     const genre: Genre = await this.getById(
       id,
       this.genreDefaultData,

@@ -11,17 +11,12 @@ export class ArtistsService extends SharedService {
     baseURL: string,
     limit: number,
     offset: number,
-  ): Promise<Artist[]> {
-    const initialArtists = await super.getAll(
-      defaultData,
-      baseURL,
-      limit,
-      offset,
-    );
+  ): Promise<ArtistCreateUpdateDTO[]> {
+    const artists = await super.getAll(defaultData, baseURL, limit, offset);
 
-    const artists: Artist[] = await Promise.all(
+    /* const artists: ArtistCreateUpdateDTO[] = await Promise.all(
       initialArtists.map(initialArtist => super.getArtist(initialArtist)),
-    );
+    ); */
 
     return artists;
   }

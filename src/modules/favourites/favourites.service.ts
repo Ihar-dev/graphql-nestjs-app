@@ -88,7 +88,7 @@ export class FavouritesService extends SharedService {
         response.data.bandsIds.map(id => super.getBandByIdForFavourites(id)),
       );
       response.data.genres = await Promise.all(
-        response.data.genresIds.map(id => super.getGenre(id)),
+        response.data.genresIds.map(id => super.getGenreById(id)),
       );
       response.data.artists = await Promise.all(
         response.data.artistsIds.map(id =>
