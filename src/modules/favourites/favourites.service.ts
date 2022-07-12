@@ -70,7 +70,7 @@ export class FavouritesService extends SharedService {
     return response ? response.data : super.getCaughtErrorData(defaultData);
   }
 
-  /* public async getFavourites(baseURL: string): Promise<Favourites> {
+  public async getFavourites(baseURL: string): Promise<FavouriteAddDTO> {
     const config = {
       headers: {
         Authorization: `Bearer ${process.env.JWT}`,
@@ -84,7 +84,7 @@ export class FavouritesService extends SharedService {
       .catch(err => super.setCaughtErrorMessage(err.name, err.message));
     if (response) {
       response.data.id = response.data._id;
-      response.data.bands = await Promise.all(
+      /* response.data.bands = await Promise.all(
         response.data.bandsIds.map(id => super.getBandByIdForFavourites(id)),
       );
       response.data.genres = await Promise.all(
@@ -104,10 +104,10 @@ export class FavouritesService extends SharedService {
             CIRCLE_LIMIT,
           ),
         ),
-      );
+      ); */
     }
     return response
       ? response.data
       : super.getCaughtErrorData(this.FavouritesDefaultData);
-  } */
+  }
 }
