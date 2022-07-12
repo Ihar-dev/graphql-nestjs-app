@@ -20,8 +20,6 @@ import { Genre } from '../genres/dto/genre.dto';
 import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
 import { Track } from '../tracks/dto/track.dto';
 
-//const CIRCLE_LIMIT = 10;
-
 @Resolver(() => Album)
 export class AlbumsResolver {
   private readonly defaultData: AlbumCreateUpdateDTO;
@@ -84,18 +82,13 @@ export class AlbumsResolver {
 
   @Query(() => Album)
   async album(@Args('id') id: string): Promise<AlbumCreateUpdateDTO> {
-    return this.albumsService.getById(
-      id,
-      this.defaultData,
-      this.baseURL,
-      //CIRCLE_LIMIT,
-    );
+    return this.albumsService.getById(id, this.defaultData, this.baseURL);
   }
 
   @ResolveField(() => [Genre])
   async genres(@Parent() album: AlbumCreateUpdateDTO): Promise<Genre[]> {
     const { genresIds } = album;
-    return await Promise.all(
+    return Promise.all(
       genresIds.map(id => {
         return this.albumsService.getById(
           id,
@@ -111,7 +104,7 @@ export class AlbumsResolver {
     @Parent() album: AlbumCreateUpdateDTO,
   ): Promise<ArtistCreateUpdateDTO[]> {
     const { artistsIds } = album;
-    return await Promise.all(
+    return Promise.all(
       artistsIds.map(id => {
         return this.albumsService.getById(
           id,
@@ -127,7 +120,7 @@ export class AlbumsResolver {
     @Parent() album: AlbumCreateUpdateDTO,
   ): Promise<TrackCreateUpdateDTO[]> {
     const { trackIds } = album;
-    return await Promise.all(
+    return Promise.all(
       trackIds.map(id => {
         return this.albumsService.getById(
           id,
@@ -143,7 +136,7 @@ export class AlbumsResolver {
     @Parent() album: AlbumCreateUpdateDTO,
   ): Promise<BandCreateUpdateDTO[]> {
     const { bandsIds } = album;
-    return await Promise.all(
+    return Promise.all(
       bandsIds.map(id => {
         return this.albumsService.getById(
           id,
@@ -155,13 +148,15 @@ export class AlbumsResolver {
   }
 
   @Query(() => [Album])
-  async albums(@Args('limit') limit: number, @Args('offset') offset: number) {
-    return this.albumsService.getAllAlbums(
+  async albums(
+    @Args('limit') limit: number,
+    @Args('offset') offset: number,
+  ): Promise<AlbumCreateUpdateDTO[]> {
+    return this.albumsService.getAll(
       this.defaultData,
       this.baseURL,
       limit,
       offset,
-      //CIRCLE_LIMIT,
     );
   }
 
@@ -178,7 +173,7 @@ export class AlbumsResolver {
     @Args('genresIds', { nullable: true, type: () => [String] })
     genresIds?: string[],
     @Args('image', { nullable: true }) image?: string,
-  ) {
+  ): Promise<AlbumCreateUpdateDTO> {
     const inputData: AlbumCreateUpdateInput = {
       name,
     };
@@ -205,7 +200,7 @@ export class AlbumsResolver {
     @Args('genresIds', { nullable: true, type: () => [String] })
     genresIds?: string[],
     @Args('image', { nullable: true }) image?: string,
-  ) {
+  ): Promise<AlbumCreateUpdateDTO> {
     const inputData: AlbumCreateUpdateInput = {
       name,
     };
@@ -224,7 +219,7 @@ export class AlbumsResolver {
   }
 
   @Mutation(() => DeleteResponseDTO)
-  async deleteAlbum(@Args('id') id: string) {
+  async deleteAlbum(@Args('id') id: string): Promise<DeleteResponseDTO> {
     return this.albumsService.delete(id, this.baseURL);
   }
 }

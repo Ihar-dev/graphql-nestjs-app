@@ -5,18 +5,10 @@ import { SharedService } from '../shared/shared.service';
 import { FavouriteAddInput } from './interfaces/favourite-input.interface';
 import { FavouriteAddDTO } from './dto/favourite-add.dto';
 import { Favourites } from './dto/favourites.dto';
-import { ArtistCreateUpdateDTO } from '../artists/dto/artist-create-update.dto';
-import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
-
-//const CIRCLE_LIMIT = 10;
 
 @Injectable()
 export class FavouritesService extends SharedService {
   private readonly FavouritesDefaultData: Favourites;
-  private readonly ArtistDefaultData: ArtistCreateUpdateDTO;
-  private readonly ArtistsBaseURL: string;
-  private readonly trackDefaultData: TrackCreateUpdateDTO;
-  private readonly tracksBaseURL: string;
 
   constructor() {
     super();
@@ -28,26 +20,6 @@ export class FavouritesService extends SharedService {
       artists: [],
       tracks: [],
     };
-    this.ArtistDefaultData = {
-      id: '',
-      firstName: '',
-      secondName: '',
-      country: '',
-      bandsIds: [],
-      instruments: [],
-    };
-    this.ArtistsBaseURL = process.env.ARTISTS_URL;
-    this.trackDefaultData = {
-      id: '',
-      title: '',
-      albumId: '',
-      bandsIds: [],
-      artistsIds: [],
-      duration: 0,
-      released: 0,
-      genresIds: [],
-    };
-    this.tracksBaseURL = process.env.TRACKS_URL;
   }
 
   public async add(
@@ -82,30 +54,7 @@ export class FavouritesService extends SharedService {
       })
       .get('', config)
       .catch(err => super.setCaughtErrorMessage(err.name, err.message));
-    if (response) {
-      response.data.id = response.data._id;
-      /* response.data.bands = await Promise.all(
-        response.data.bandsIds.map(id => super.getBandByIdForFavourites(id)),
-      );
-      response.data.genres = await Promise.all(
-        response.data.genresIds.map(id => super.getGenreById(id)),
-      );
-      response.data.artists = await Promise.all(
-        response.data.artistsIds.map(id =>
-          super.getArtistById(id, this.ArtistDefaultData, this.ArtistsBaseURL),
-        ),
-      );
-      response.data.tracks = await Promise.all(
-        response.data.tracksIds.map(id =>
-          super.getTrackById(
-            id,
-            this.trackDefaultData,
-            this.tracksBaseURL,
-            CIRCLE_LIMIT,
-          ),
-        ),
-      ); */
-    }
+    if (response) response.data.id = response.data._id;
     return response
       ? response.data
       : super.getCaughtErrorData(this.FavouritesDefaultData);

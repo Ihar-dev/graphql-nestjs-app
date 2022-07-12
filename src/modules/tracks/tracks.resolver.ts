@@ -20,8 +20,6 @@ import { BandCreateUpdateDTO } from '../bands/dto/band-create-update.dto';
 import { Band } from '../bands/dto/band.dto';
 import { Genre } from '../genres/dto/genre.dto';
 
-//const CIRCLE_LIMIT = 10;
-
 @Resolver(() => Track)
 export class TracksResolver {
   private readonly defaultData: TrackCreateUpdateDTO;
@@ -84,12 +82,7 @@ export class TracksResolver {
 
   @Query(() => Track)
   async track(@Args('id') id: string): Promise<TrackCreateUpdateDTO> {
-    return this.tracksService.getById(
-      id,
-      this.defaultData,
-      this.baseURL,
-      //CIRCLE_LIMIT,
-    );
+    return this.tracksService.getById(id, this.defaultData, this.baseURL);
   }
 
   @ResolveField(() => Album)
@@ -125,7 +118,7 @@ export class TracksResolver {
     @Parent() track: TrackCreateUpdateDTO,
   ): Promise<BandCreateUpdateDTO[]> {
     const { bandsIds } = track;
-    return await Promise.all(
+    return Promise.all(
       bandsIds.map(id => {
         return this.tracksService.getById(
           id,
@@ -155,12 +148,11 @@ export class TracksResolver {
     @Args('limit') limit: number,
     @Args('offset') offset: number,
   ): Promise<TrackCreateUpdateDTO[]> {
-    return this.tracksService.getAllTracks(
+    return this.tracksService.getAll(
       this.defaultData,
       this.baseURL,
       limit,
       offset,
-      //CIRCLE_LIMIT,
     );
   }
 
@@ -174,7 +166,7 @@ export class TracksResolver {
     @Args('genresIds', { type: () => [String] }) genresIds: string[],
     @Args('bandsIds', { nullable: true, type: () => [String] })
     bandsIds?: string[],
-  ) {
+  ): Promise<TrackCreateUpdateDTO> {
     const inputData: TrackCreateUpdateInput = {
       title,
       albumId,
@@ -198,7 +190,7 @@ export class TracksResolver {
     @Args('genresIds', { type: () => [String] }) genresIds: string[],
     @Args('bandsIds', { nullable: true, type: () => [String] })
     bandsIds?: string[],
-  ) {
+  ): Promise<TrackCreateUpdateDTO> {
     const inputData: TrackCreateUpdateInput = {
       title,
       albumId,
@@ -217,7 +209,7 @@ export class TracksResolver {
   }
 
   @Mutation(() => DeleteResponseDTO)
-  async deleteTrack(@Args('id') id: string) {
+  async deleteTrack(@Args('id') id: string): Promise<DeleteResponseDTO> {
     return this.tracksService.delete(id, this.baseURL);
   }
 }

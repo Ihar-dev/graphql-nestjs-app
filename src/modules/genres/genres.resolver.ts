@@ -4,7 +4,7 @@ import { GenresService } from './genres.service';
 import { Genre } from './dto/genre.dto';
 import { DeleteResponseDTO } from '../shared/dto/delete-response.dto';
 
-@Resolver('Genres')
+@Resolver(() => Genre)
 export class GenresResolver {
   private readonly defaultData: Genre;
   private readonly baseURL: string;
@@ -21,12 +21,15 @@ export class GenresResolver {
   }
 
   @Query(() => Genre)
-  async genre(@Args('id') id: string) {
+  async genre(@Args('id') id: string): Promise<Genre> {
     return this.genresService.getById(id, this.defaultData, this.baseURL);
   }
 
   @Query(() => [Genre])
-  async genres(@Args('limit') limit: number, @Args('offset') offset: number) {
+  async genres(
+    @Args('limit') limit: number,
+    @Args('offset') offset: number,
+  ): Promise<Genre[]> {
     return this.genresService.getAll(
       this.defaultData,
       this.baseURL,
@@ -41,7 +44,7 @@ export class GenresResolver {
     @Args('description') description: string,
     @Args('country') country: string,
     @Args('year') year: number,
-  ) {
+  ): Promise<Genre> {
     return this.genresService.create(
       { name, description, country, year },
       this.defaultData,
@@ -56,7 +59,7 @@ export class GenresResolver {
     @Args('description') description: string,
     @Args('country') country: string,
     @Args('year') year: number,
-  ) {
+  ): Promise<Genre> {
     return this.genresService.update(
       id,
       { name, description, country, year },
@@ -66,7 +69,7 @@ export class GenresResolver {
   }
 
   @Mutation(() => DeleteResponseDTO)
-  async deleteGenre(@Args('id') id: string) {
+  async deleteGenre(@Args('id') id: string): Promise<DeleteResponseDTO> {
     return this.genresService.delete(id, this.baseURL);
   }
 }

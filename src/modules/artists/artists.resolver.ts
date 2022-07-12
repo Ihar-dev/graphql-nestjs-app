@@ -51,7 +51,7 @@ export class ArtistsResolver {
     @Parent() artist: ArtistCreateUpdateDTO,
   ): Promise<BandCreateUpdateDTO[]> {
     const { bandsIds } = artist;
-    return await Promise.all(
+    return Promise.all(
       bandsIds.map(id => {
         return this.artistsService.getById(
           id,
@@ -63,8 +63,11 @@ export class ArtistsResolver {
   }
 
   @Query(() => [Artist])
-  async artists(@Args('limit') limit: number, @Args('offset') offset: number) {
-    return this.artistsService.getAllArtists(
+  async artists(
+    @Args('limit') limit: number,
+    @Args('offset') offset: number,
+  ): Promise<ArtistCreateUpdateDTO[]> {
+    return this.artistsService.getAll(
       this.defaultData,
       this.baseURL,
       limit,
@@ -84,7 +87,7 @@ export class ArtistsResolver {
     bandsIds?: string[],
     @Args('instruments', { nullable: true, type: () => [String] })
     instruments?: string[],
-  ) {
+  ): Promise<ArtistCreateUpdateDTO> {
     const inputData: ArtistCreateUpdateInput = {
       firstName,
       secondName,
@@ -115,7 +118,7 @@ export class ArtistsResolver {
     bandsIds?: string[],
     @Args('instruments', { nullable: true, type: () => [String] })
     instruments?: string[],
-  ) {
+  ): Promise<ArtistCreateUpdateDTO> {
     const inputData: ArtistCreateUpdateInput = {
       firstName,
       secondName,
@@ -135,7 +138,7 @@ export class ArtistsResolver {
   }
 
   @Mutation(() => DeleteResponseDTO)
-  async deleteArtist(@Args('id') id: string) {
+  async deleteArtist(@Args('id') id: string): Promise<DeleteResponseDTO> {
     return this.artistsService.delete(id, this.baseURL);
   }
 }

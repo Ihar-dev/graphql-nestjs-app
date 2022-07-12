@@ -85,7 +85,7 @@ export class FavouritesResolver {
     @Parent() favourites: FavouriteAddDTO,
   ): Promise<BandCreateUpdateDTO[]> {
     const { bandsIds } = favourites;
-    return await Promise.all(
+    return Promise.all(
       bandsIds.map(id => {
         return this.favouritesService.getById(
           id,
@@ -99,7 +99,7 @@ export class FavouritesResolver {
   @ResolveField(() => [Genre])
   async genres(@Parent() favourites: FavouriteAddDTO): Promise<Genre[]> {
     const { genresIds } = favourites;
-    return await Promise.all(
+    return Promise.all(
       genresIds.map(id => {
         return this.favouritesService.getById(
           id,
@@ -115,7 +115,7 @@ export class FavouritesResolver {
     @Parent() favourites: FavouriteAddDTO,
   ): Promise<ArtistCreateUpdateDTO[]> {
     const { artistsIds } = favourites;
-    return await Promise.all(
+    return Promise.all(
       artistsIds.map(id => {
         return this.favouritesService.getById(
           id,
@@ -131,7 +131,7 @@ export class FavouritesResolver {
     @Parent() favourites: FavouriteAddDTO,
   ): Promise<TrackCreateUpdateDTO[]> {
     const { tracksIds } = favourites;
-    return await Promise.all(
+    return Promise.all(
       tracksIds.map(id => {
         return this.favouritesService.getById(
           id,
@@ -143,7 +143,7 @@ export class FavouritesResolver {
   }
 
   @Mutation(() => FavouriteAddDTO)
-  async addTrackToFavourites(@Args('id') id: string) {
+  async addTrackToFavourites(@Args('id') id: string): Promise<FavouriteAddDTO> {
     const inputData: FavouriteAddInput = {
       id,
       type: 'tracks',
@@ -156,7 +156,7 @@ export class FavouritesResolver {
   }
 
   @Mutation(() => FavouriteAddDTO)
-  async addBandToFavourites(@Args('id') id: string) {
+  async addBandToFavourites(@Args('id') id: string): Promise<FavouriteAddDTO> {
     const inputData: FavouriteAddInput = {
       id,
       type: 'bands',
@@ -169,7 +169,9 @@ export class FavouritesResolver {
   }
 
   @Mutation(() => FavouriteAddDTO)
-  async addArtistToFavourites(@Args('id') id: string) {
+  async addArtistToFavourites(
+    @Args('id') id: string,
+  ): Promise<FavouriteAddDTO> {
     const inputData: FavouriteAddInput = {
       id,
       type: 'artists',
@@ -182,7 +184,7 @@ export class FavouritesResolver {
   }
 
   @Mutation(() => FavouriteAddDTO)
-  async addGenreToFavourites(@Args('id') id: string) {
+  async addGenreToFavourites(@Args('id') id: string): Promise<FavouriteAddDTO> {
     const inputData: FavouriteAddInput = {
       id,
       type: 'genres',

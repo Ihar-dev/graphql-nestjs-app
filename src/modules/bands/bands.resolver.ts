@@ -48,7 +48,7 @@ export class BandsResolver {
   @ResolveField(() => [Genre])
   async genres(@Parent() band: BandCreateUpdateDTO): Promise<Genre[]> {
     const { genresIds } = band;
-    return await Promise.all(
+    return Promise.all(
       genresIds.map(id => {
         return this.bandsService.getById(
           id,
@@ -64,7 +64,7 @@ export class BandsResolver {
     @Args('limit') limit: number,
     @Args('offset') offset: number,
   ): Promise<BandCreateUpdateDTO[]> {
-    return this.bandsService.getAllBands(
+    return this.bandsService.getAll(
       this.defaultData,
       this.baseURL,
       limit,
@@ -81,7 +81,7 @@ export class BandsResolver {
     @Args('website', { nullable: true }) website?: string,
     @Args('genresIds', { nullable: true, type: () => [String] })
     genresIds?: string[],
-  ) {
+  ): Promise<BandCreateUpdateDTO> {
     const inputData: BandCreateUpdateInput = { name };
     if (origin) inputData.origin = origin;
     if (members) inputData.members = members;
@@ -100,7 +100,7 @@ export class BandsResolver {
     @Args('website', { nullable: true }) website?: string,
     @Args('genresIds', { nullable: true, type: () => [String] })
     genresIds?: string[],
-  ) {
+  ): Promise<BandCreateUpdateDTO> {
     const inputData: BandCreateUpdateInput = { name };
     if (origin) inputData.origin = origin;
     if (members) inputData.members = members;
@@ -115,7 +115,7 @@ export class BandsResolver {
   }
 
   @Mutation(() => DeleteResponseDTO)
-  async deleteBand(@Args('id') id: string) {
+  async deleteBand(@Args('id') id: string): Promise<DeleteResponseDTO> {
     return this.bandsService.delete(id, this.baseURL);
   }
 }
