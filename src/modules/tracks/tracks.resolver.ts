@@ -139,7 +139,7 @@ export class TracksResolver {
   @ResolveField(() => [Genre])
   async genres(@Parent() track: TrackCreateUpdateDTO): Promise<Genre[]> {
     const { genresIds } = track;
-    return await Promise.all(
+    return Promise.all(
       genresIds.map(id => {
         return this.tracksService.getById(
           id,
