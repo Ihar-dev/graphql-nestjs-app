@@ -19,8 +19,8 @@ import { BandCreateUpdateDTO } from '../bands/dto/band-create-update.dto';
 export class ArtistsResolver {
   private readonly defaultData: ArtistCreateUpdateDTO;
   private readonly baseURL: string;
-  public readonly BandsDefaultData: BandCreateUpdateDTO;
-  public readonly BandsBaseURL: string;
+  public readonly bandDefaultData: BandCreateUpdateDTO;
+  public readonly bandsBaseURL: string;
 
   constructor(private readonly artistsService: ArtistsService) {
     this.defaultData = {
@@ -32,22 +32,18 @@ export class ArtistsResolver {
       instruments: [],
     };
     this.baseURL = process.env.ARTISTS_URL;
-    this.BandsDefaultData = {
+    this.bandDefaultData = {
       id: '',
       name: '',
       members: [],
       genresIds: [],
     };
-    this.BandsBaseURL = process.env.BANDS_URL;
+    this.bandsBaseURL = process.env.BANDS_URL;
   }
 
   @Query(() => Artist)
   async artist(@Args('id') id: string): Promise<ArtistCreateUpdateDTO> {
-    return this.artistsService.getArtistById(
-      id,
-      this.defaultData,
-      this.baseURL,
-    );
+    return this.artistsService.getById(id, this.defaultData, this.baseURL);
   }
 
   @ResolveField(() => [Band])
@@ -57,10 +53,10 @@ export class ArtistsResolver {
     const { bandsIds } = artist;
     return await Promise.all(
       bandsIds.map(id => {
-        return this.artistsService.getBandById(
+        return this.artistsService.getById(
           id,
-          this.BandsDefaultData,
-          this.BandsBaseURL,
+          this.bandDefaultData,
+          this.bandsBaseURL,
         );
       }),
     );

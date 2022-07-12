@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { SharedService } from '../shared/shared.service';
 import { BandCreateUpdateDTO } from './dto/band-create-update.dto';
-import { Band } from './dto/band.dto';
+//import { Band } from './dto/band.dto';
 
 @Injectable()
 export class BandsService extends SharedService {

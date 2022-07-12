@@ -13,7 +13,7 @@ export class Track {
   @Field()
   readonly title: string;
 
-  @Field({ nullable: true })
+  @Field(() => Album, { nullable: true })
   readonly album: Album;
 
   @Field(() => [Artist])

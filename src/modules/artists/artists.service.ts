@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { SharedService } from '../shared/shared.service';
 import { ArtistCreateUpdateDTO } from './dto/artist-create-update.dto';
-import { Artist } from './dto/artist.dto';
+//import { Artist } from './dto/artist.dto';
 
 @Injectable()
 export class ArtistsService extends SharedService {

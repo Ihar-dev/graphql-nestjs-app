@@ -19,6 +19,8 @@ import { Genre } from '../genres/dto/genre.dto';
 export class BandsResolver {
   private readonly defaultData: BandCreateUpdateDTO;
   private readonly baseURL: string;
+  public readonly genreDefaultData: Genre;
+  public readonly genresBaseURL: string;
 
   constructor(private readonly bandsService: BandsService) {
     this.defaultData = {
@@ -28,11 +30,19 @@ export class BandsResolver {
       genresIds: [],
     };
     this.baseURL = process.env.BANDS_URL;
+    this.genreDefaultData = {
+      id: '',
+      name: '',
+      description: '',
+      country: '',
+      year: 0,
+    };
+    this.genresBaseURL = process.env.GENRES_URL;
   }
 
   @Query(() => Band)
   async band(@Args('id') id: string): Promise<BandCreateUpdateDTO> {
-    return this.bandsService.getBandById(id, this.defaultData, this.baseURL);
+    return this.bandsService.getById(id, this.defaultData, this.baseURL);
   }
 
   @ResolveField(() => [Genre])
@@ -40,7 +50,11 @@ export class BandsResolver {
     const { genresIds } = band;
     return await Promise.all(
       genresIds.map(id => {
-        return this.bandsService.getGenreById(id);
+        return this.bandsService.getById(
+          id,
+          this.genreDefaultData,
+          this.genresBaseURL,
+        );
       }),
     );
   }

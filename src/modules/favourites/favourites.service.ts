@@ -8,7 +8,7 @@ import { Favourites } from './dto/favourites.dto';
 import { ArtistCreateUpdateDTO } from '../artists/dto/artist-create-update.dto';
 import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
 
-const CIRCLE_LIMIT = 10;
+//const CIRCLE_LIMIT = 10;
 
 @Injectable()
 export class FavouritesService extends SharedService {

@@ -2,32 +2,32 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 import { DeleteResponseDTO } from './dto/delete-response.dto';
-import { Genre } from '../genres/dto/genre.dto';
-import { BandCreateUpdateDTO } from '../bands/dto/band-create-update.dto';
-import { Band } from '../bands/dto/band.dto';
-import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
-import { Track } from '../tracks/dto/track.dto';
-import { ArtistCreateUpdateDTO } from '../artists/dto/artist-create-update.dto';
-import { Artist } from '../artists/dto/artist.dto';
-import { AlbumCreateUpdateDTO } from '../albums/dto/album-create-update.dto';
-import { Album } from '../albums/dto/album.dto';
+//import { Genre } from '../genres/dto/genre.dto';
+//import { BandCreateUpdateDTO } from '../bands/dto/band-create-update.dto';
+//import { Band } from '../bands/dto/band.dto';
+//import { TrackCreateUpdateDTO } from '../tracks/dto/track-create-update.dto';
+//import { Track } from '../tracks/dto/track.dto';
+//import { ArtistCreateUpdateDTO } from '../artists/dto/artist-create-update.dto';
+//import { Artist } from '../artists/dto/artist.dto';
+//import { AlbumCreateUpdateDTO } from '../albums/dto/album-create-update.dto';
+//import { Album } from '../albums/dto/album.dto';
 
 const NO_SERVER_RESPONSE_VALUE = 'No Server Response';
 
 @Injectable()
 export class SharedService {
   private caughtErrorMessage = NO_SERVER_RESPONSE_VALUE;
-  public readonly genreDefaultData: Genre;
+  /* public readonly genreDefaultData: Genre;
   public readonly genreBaseURL: string;
   public readonly BandsDefaultData: BandCreateUpdateDTO;
   public readonly BandsBaseURL: string;
   public readonly artistsDefaultData: ArtistCreateUpdateDTO;
   public readonly artistsBaseURL: string;
   private readonly AlbumDefaultData: AlbumCreateUpdateDTO;
-  private readonly AlbumsBaseURL: string;
+  private readonly AlbumsBaseURL: string; */
 
   constructor() {
-    this.genreDefaultData = {
+    /* this.genreDefaultData = {
       id: '',
       name: '',
       description: '',
@@ -59,7 +59,7 @@ export class SharedService {
       trackIds: [],
       genresIds: [],
     };
-    this.AlbumsBaseURL = process.env.ALBUMS_URL;
+    this.AlbumsBaseURL = process.env.ALBUMS_URL; */
   }
 
   public async create<T, Q>(
@@ -186,7 +186,7 @@ export class SharedService {
     return this.getBandById(id, this.BandsDefaultData, this.BandsBaseURL);
   } */
 
-  public async getBandById(
+  /* public async getBandById(
     id: string,
     defaultData: BandCreateUpdateDTO,
     baseURL: string,
@@ -200,9 +200,9 @@ export class SharedService {
     //const band = await this.getBand(initialBand);
 
     return band;
-  }
+  } */
 
-  public async getTrackById(
+  /* public async getTrackById(
     id: string,
     defaultData: TrackCreateUpdateDTO,
     baseURL: string,
@@ -217,26 +217,26 @@ export class SharedService {
     const track = await this.getTrack(initialTrack, circle);
 
     return track;
-  }
+  } */
 
-  public async getAlbumById(
+  /* public async getAlbumById(
     id: string,
     defaultData: AlbumCreateUpdateDTO,
     baseURL: string,
-    circle: number,
-  ): Promise<Album> {
-    const initialAlbum: AlbumCreateUpdateDTO = await this.getById(
+    //circle: number,
+  ): Promise<AlbumCreateUpdateDTO> {
+    const album: AlbumCreateUpdateDTO = await this.getById(
       id,
       defaultData,
       baseURL,
     );
 
-    const album = await this.getAlbum(initialAlbum, circle);
+    // const album = await this.getAlbum(initialAlbum, circle);
 
     return album;
-  }
+  } */
 
-  public async getAlbum(
+  /* public async getAlbum(
     initialAlbum: AlbumCreateUpdateDTO,
     circle: number,
   ): Promise<Album> {
@@ -274,9 +274,9 @@ export class SharedService {
     if (initialAlbum.image) album.image = initialAlbum.image;
     else album.image = null;
     return album;
-  }
+  } */
 
-  public async getTrack(
+  /* public async getTrack(
     initialTrack: TrackCreateUpdateDTO,
     circle: number,
   ): Promise<Track> {
@@ -297,7 +297,7 @@ export class SharedService {
         initialTrack.albumId,
         this.AlbumDefaultData,
         this.AlbumsBaseURL,
-        circle,
+        //circle,
       );
     if (initialTrack.id) track.id = initialTrack.id;
     if (initialTrack.title) track.title = initialTrack.title;
@@ -324,9 +324,9 @@ export class SharedService {
       );
     }
     return track;
-  }
+  } */
 
-  public async getArtistById(
+  /* public async getArtistById(
     id: string,
     defaultData: ArtistCreateUpdateDTO,
     baseURL: string,
@@ -340,9 +340,9 @@ export class SharedService {
     // const artist = await this.getArtist(initialArtist);
 
     return artist;
-  }
+  } */
 
-  public async getArtist(
+  /* public async getArtist(
     initialArtist: ArtistCreateUpdateDTO,
   ): Promise<Artist> {
     const artist = {
@@ -378,7 +378,7 @@ export class SharedService {
       artist.instruments = initialArtist.instruments;
     else artist.instruments = null;
     return artist;
-  }
+  } */
 
   /* public async getBand(initialBand: BandCreateUpdateDTO): Promise<Band> {
     const band = {
@@ -405,12 +405,12 @@ export class SharedService {
     return band;
   } */
 
-  public async getGenreById(id: string): Promise<Genre> {
+  /* public async getGenreById(id: string): Promise<Genre> {
     const genre: Genre = await this.getById(
       id,
       this.genreDefaultData,
       this.genreBaseURL,
     );
     return genre;
-  }
+  } */
 }

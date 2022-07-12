@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { SharedService } from '../shared/shared.service';
 import { AlbumCreateUpdateDTO } from './dto/album-create-update.dto';
-import { Album } from './dto/album.dto';
+//import { Album } from './dto/album.dto';
 
 @Injectable()
 export class AlbumsService extends SharedService {
@@ -11,18 +11,13 @@ export class AlbumsService extends SharedService {
     baseURL: string,
     limit: number,
     offset: number,
-    circle: number,
-  ): Promise<Album[]> {
-    const initialAlbums = await super.getAll(
-      defaultData,
-      baseURL,
-      limit,
-      offset,
-    );
+    //circle: number,
+  ): Promise<AlbumCreateUpdateDTO[]> {
+    const albums = await super.getAll(defaultData, baseURL, limit, offset);
 
-    const albums: Album[] = await Promise.all(
+    /* const albums: Album[] = await Promise.all(
       initialAlbums.map(initialAlbum => super.getAlbum(initialAlbum, circle)),
-    );
+    ); */
 
     return albums;
   }
