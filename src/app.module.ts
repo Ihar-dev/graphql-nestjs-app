@@ -3,17 +3,32 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ArtistsModule } from './modules/artists/artist.module';
-// import { join } from 'path';
+import { ArtistsModule } from './modules/artists/artists.module';
+import { AlbumsModule } from './modules/albums/albums.module';
+import { UsersModule } from './modules/users/users.module';
+import { GenresModule } from './modules/genres/genres.module';
+import { SharedModule } from './modules/shared/shared.module';
+import { BandsModule } from './modules/bands/bands.module';
+import { TracksModule } from './modules/tracks/tracks.module';
+import { FavouritesModule } from './modules/favourites/favourites.module';
 
 @Module({
   imports: [
     ArtistsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      buildSchemaOptions: {
+        numberScalarMode: 'integer',
+      },
       driver: ApolloDriver,
-      // autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       autoSchemaFile: true,
     }),
+    AlbumsModule,
+    UsersModule,
+    GenresModule,
+    SharedModule,
+    BandsModule,
+    TracksModule,
+    FavouritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
